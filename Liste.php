@@ -12,7 +12,7 @@ try {
         ORDER BY c.Date ASC
     ";
 
-    // Exécution de la requête
+    
     $stmt = $pdo->query($sql);
     $cours = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
