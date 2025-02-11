@@ -36,9 +36,9 @@
 
     <div class="container my-4">
         <div class="row">
-            <div class="col-md-4 bg-light p-3">Column 1</div>
-            <div class="col-md-4 bg-secondary text-white p-3">Column 2</div>
-            <div class="col-md-4 bg-dark text-white p-3">Column 3</div>
+            <div class="col-md-4 bg-light p-3">c1</div>
+            <div class="col-md-4 bg-secondary text-white p-3">c2</div>
+            <div class="col-md-4 bg-dark text-white p-3">c3</div>
         </div>
     </div>
 
