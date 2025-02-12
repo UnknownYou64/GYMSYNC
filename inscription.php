@@ -14,7 +14,7 @@
         exit;
     }
 
-    // Empêcher les membres d'accéder à Administrateur.php
+/* enmpecher l'acces a administrateur en modifaint l'adresse mail */
     if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "admin") {
         header('Location: index.php');
         exit;
@@ -147,7 +147,7 @@
                     ':id_cours' => $date_cours
                 ]);
 
-                echo "<script>alert('Inscription réussie !'); window.location.href='index.php';</script>";
+                echo "<script>alert('Inscription réussie !'); window.location.href='Liste.php';</script>";
             } catch (PDOException $e) {
                 echo "<script>alert('Erreur lors de l\'inscription : " . $e->getMessage() . "');</script>";
             }

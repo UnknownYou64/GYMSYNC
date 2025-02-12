@@ -5,6 +5,7 @@
         header('Location: login.php');
         exit;
     }
+/* enmpecher l'acces a administrateur en modifaint l'adresse mail */
 
     if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "admin") {
         header('Location: index.php');
