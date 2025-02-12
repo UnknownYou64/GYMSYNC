@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire avec Bootstrap</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <?php
+    session_start();
+
+    // Empêcher l'accès aux non-connectés
+    if (!isset($_SESSION['role'])) {
+        header('Location: login.php');
+        exit;
+    }
+
+    // Empêcher les membres d'accéder à Administrateur.php
+    if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "admin") {
+        header('Location: index.php');
+        exit;
+    }
+    ?>
 
     <?php
     require_once 'Connexion.php';
@@ -47,6 +62,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="Liste.php">Liste des Cours</a>
                     </li>
+                    
+                    <?php if (isset($_SESSION['role'])): ?>
+                        <a href="logout.php" class="btn btn-danger">Déconnexion</a>
+                    <?php endif; ?>
+
                 </ul>
             </div>
         </div>

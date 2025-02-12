@@ -1,23 +1,36 @@
 <?php
 session_start();
+require_once 'Connexion.php'; 
 
-// Définir les informations d'identification de l'administrateur (hardcodé)
-$admin_email = "admin@gmail.com"; // L'email administrateur
-$admin_password = "admin"; // Le mot de passe administrateur
 
-// Vérifier si le formulaire de connexion est soumis
+$admin_email = "admin@gmail.com";
+$admin_password = "admin";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Récupérer les données du formulaire
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
+    
     if ($email === $admin_email && $password === $admin_password) {
-        
-        $_SESSION['is_admin'] = true; 
-        header('Location: Administrateur.php'); 
+        $_SESSION['role'] = "admin";
+        $_SESSION['email'] = $email;
+        header('Location: Administrateur.php');
         exit;
     } else {
-        echo "<script>alert('Email ou mot de passe incorrect.');</script>";
+        
+        $sql = "SELECT * FROM membre WHERE Mail = :email AND Code IS NOT NULL";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        $membre = $stmt->fetch();
+
+        if ($membre) {
+            $_SESSION['role'] = "membre";
+            $_SESSION['email'] = $membre['Mail'];
+            header('Location: index.php'); 
+            exit;
+        } else {
+            echo "<script>alert('Connexion échouée. Vérifiez vos informations.');</script>";
+        }
     }
 }
 ?>
@@ -35,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card p-4 shadow">
-                    <h3 class="text-center">Connexion Administrateur</h3>
+                    <h3 class="text-center">Connexion</h3>
                     <form method="POST" action="login.php">
                         <div class="mb-3">
                             <label for="email" class="form-label">E-mail</label>

@@ -25,6 +25,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="Liste.php">Liste des Cours</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Login.php">Se connecter</a>
+                    </li>
+                    
                 </ul>
             </div>
         </div>

@@ -1,10 +1,12 @@
 <?php
-session_start(); 
+session_start();
 
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
-    header('Location: login.php');
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
+    header('Location: index.php');
     exit;
 }
+
+
 
 require_once 'Connexion.php';
 

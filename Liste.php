@@ -1,4 +1,20 @@
 <?php
+    session_start();
+
+    if (!isset($_SESSION['role'])) {
+        header('Location: login.php');
+        exit;
+    }
+
+    if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "admin") {
+        header('Location: index.php');
+        exit;
+    }
+?>
+
+
+
+<?php
 require_once 'Connexion.php';
 
 try {
@@ -47,6 +63,10 @@ try {
                     <li class="nav-item">
                         <a class="nav-link active" href="Liste.php">Liste des Cours</a>
                     </li>
+                    <?php if (isset($_SESSION['role'])): ?>
+                        <a href="logout.php" class="btn btn-danger">Déconnexion</a>
+                    <?php endif; ?>
+
                 </ul>
             </div>
         </div>
