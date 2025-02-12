@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+
+/* enmpecher l'acces a administrateur en modifaint l'adresse mail */
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
     header('Location: index.php');
     exit;
