@@ -70,9 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <a class="nav-link" href="Liste.php">Liste des Cours</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Déconnexion</a>
-                    </li>
+                    <?php if (isset($_SESSION['role'])): ?>
+                        <a href="logout.php" class="btn btn-danger">Déconnexion</a>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

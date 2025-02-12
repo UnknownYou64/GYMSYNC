@@ -44,6 +44,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Mon Site</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.php">Accueil</a>
+                                        
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
