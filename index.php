@@ -3,7 +3,7 @@ session_start();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,28 +20,29 @@ session_start();
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link active" href="index.php">Accueil</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link" href="inscription.php">Inscription</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item me-3">
                     <a class="nav-link" href="Liste.php">Liste des Cours</a>
                 </li>
                 
-                <?php if (isset($_SESSION['role'])): ?>
-                    <!-- Si l'utilisateur est connecté -->
-                    <?php if (isset($_SESSION['role'])): ?>
-                        <a href="logout.php" class="btn btn-danger">Déconnexion</a>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <!-- Si l'utilisateur n'est pas connecté -->
-                    <li class="nav-item">
+                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
+                    <li class="nav-item me-3">
+                        <a href="Administrateur.php" class="nav-link">Admin</a>
+                    </li>
+                <?php } ?>
+                
+                <?php if (isset($_SESSION['role'])) { ?>
+                    <a href="logout.php" class="btn btn-danger">Déconnexion</a>
+                <?php } else { ?>
+                    <li class="nav-item me-3">
                         <a class="nav-link" href="Login.php">Se connecter</a>
                     </li>
-                <?php endif; ?>
-                
+                <?php } ?>
             </ul>
         </div>
     </div>
@@ -60,13 +61,9 @@ session_start();
 </div>
 
 <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2025 GYMSYNC </p>
+    <p>&copy; 2025 GYMSYNC</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
-
