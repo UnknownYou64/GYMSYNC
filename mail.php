@@ -15,12 +15,9 @@ try {
     $mail->Host = 'smtp.gmail.com';  // Hôte du serveur SMTP (ici Gmail)
     $mail->SMTPAuth = true;  // Authentification SMTP activée
     $mail->Username = 'gymsync64@gmail.com';  // Ton adresse Gmail
-    $mail->Password = 'Gym64sync!@';  // Ton mot de passe (ou mot de passe spécifique d'application)
+    $mail->Password = 'bqoc ddnl wvbv mevn';  // Ton mot de passe (ou mot de passe spécifique d'application)
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;  // Sécurisation de la connexion
     $mail->Port = 587;  // Port SMTP
-
-    $mail->SMTPDebug = 2;  // Affiche les détails du processus SMTP
-    $mail->Debugoutput = 'html';  // Format de sortie du débogage
 
 
     // Définition des informations de l'email
