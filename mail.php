@@ -19,16 +19,25 @@ try {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;  // Sécurisation de la connexion
     $mail->Port = 587;  // Port SMTP
 
-
+   
     // Définition des informations de l'email
     $mail->setFrom('gymsync64@gmail.com', 'Gymsync');
-    $mail->addAddress('william.lotz64@gmail.com', 'LOTZ');  // Destinataire
+    $mail->addAddress($email, $nom . ' ' . $prenom);  // Destinataire = celui qui s'inscrit
     $mail->addReplyTo('gymsync64@gmail.com', 'Gymsync');  // Adresse pour les réponses
 
     // Contenu de l'email
     $mail->isHTML(true);  // Email au format HTML
-    $mail->Subject = 'Test de PHPMailer';
-    $mail->Body    = '<h1>Ceci est un test d\'email envoyé avec PHPMailer</h1>';
+    $mail->Subject = 'Confirmation d\'inscription à votre cours';
+    $mail->Body    = "
+        <h1>Bonjour $prenom,</h1>
+        <p>Vous êtes bien inscrit(e) au cours du <strong>" . date('d/m/Y', strtotime($cours['Date'])) . "</strong>.</p>
+        <p>Lieu : Espace Daniel Balavoine<br>
+                  Avenue de l'Europe<br>
+                  64320 Bizanos</p>
+        <p>Nous avons hâte de vous voir !</p>
+        <br>
+        <p>Cordialement,<br>L'équipe Gymsync</p>";
+
 
     // Envoi de l'email
     $mail->send();
