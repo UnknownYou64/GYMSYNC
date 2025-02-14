@@ -146,30 +146,7 @@
     }
 
 
-    if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($date_cours)) {
-    try {
-        // Insertion des données en base
-        $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :email)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':nom' => $nom,
-            ':prenom' => $prenom,
-            ':email' => $email
-        ]);
-
-        // Inscription au cours
-        $sql_reservation = "INSERT INTO reservation (IDC, Identifiant) VALUES (:id_cours, LAST_INSERT_ID())";
-        $stmt_reservation = $pdo->prepare($sql_reservation);
-        $stmt_reservation->execute([':id_cours' => $date_cours]);
-
-        // Appel du fichier mail.php pour envoyer l'email
-        require_once 'mail.php';
-
-        echo "<script>alert('Inscription réussie ! Un e-mail de confirmation vous a été envoyé.'); window.location.href='Liste.php';</script>";
-    } catch (PDOException $e) {
-        echo "<script>alert('Erreur lors de l\'inscription : " . $e->getMessage() . "');</script>";
-    }
-}
+  
     ?>
 
 
