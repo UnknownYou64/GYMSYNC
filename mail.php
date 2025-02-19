@@ -1,48 +1,54 @@
 <?php
 
 // Inclusion de l'autoloader de Composer
-require 'vendor/autoload.php';  // Assure-toi que ce chemin est correct selon l'emplacement du fichier
+require 'vendor/autoload.php';
 
 // Utilisation des classes PHPMailer
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$mail = new PHPMailer(true);  // Crée une nouvelle instance PHPMailer
+$mail = new PHPMailer(true);
 
 try {
     // Configuration du serveur SMTP
-    $mail->isSMTP();  // On utilise SMTP
-    $mail->Host = 'smtp.gmail.com';  // Hôte du serveur SMTP (ici Gmail)
-    $mail->SMTPAuth = true;  // Authentification SMTP activée
-    $mail->Username = 'gymsync64@gmail.com';  // Ton adresse Gmail
-    $mail->Password = 'bqoc ddnl wvbv mevn';  // Ton mot de passe (ou mot de passe spécifique d'application)
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;  // Sécurisation de la connexion
-    $mail->Port = 587;  // Port SMTP
+    $mail->isSMTP();
+    $mail->Host = 'smtp.gmail.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'gymsync64@gmail.com';
+    $mail->Password = 'bqoc ddnl wvbv mevn';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = 587;
 
-   
     // Définition des informations de l'email
     $mail->setFrom('gymsync64@gmail.com', 'Gymsync');
-    $mail->addAddress($email, $nom . ' ' . $prenom);  // Destinataire = celui qui s'inscrit
-    $mail->addReplyTo('gymsync64@gmail.com', 'Gymsync');  // Adresse pour les réponses
+    $mail->addAddress($email, $nom . ' ' . $prenom);
+    $mail->addReplyTo('gymsync64@gmail.com', 'Gymsync');
 
     // Contenu de l'email
-    $mail->isHTML(true);  // Email au format HTML
-    $mail->Subject = 'Confirmation d\'inscription à votre cours';
-    $mail->Body    = "
-        <h1>Bonjour $prenom,</h1>
-        <p>Vous êtes bien inscrit(e) au cours du <strong>" . date('d/m/Y', strtotime($cours['Date'])) . "</strong>.</p>
-        <p>Lieu : Espace Daniel Balavoine<br>
-                  Avenue de l'Europe<br>
-                  64320 Bizanos</p>
-        <p>La confirmations de votre inscription se fera lorsque vous aurez reglez un cheque a Mme Mundubeltz</p>
-        <br>
-        <p>Cordialement,<br>L'équipe Gymsync</p>";
+    $mail->isHTML(true);
+    $mail->Subject = 'Confirmation d\'inscription à vos cours';
 
+    // Création du contenu de l'email
+    $body = "<h1>Bonjour $prenom,</h1>";
+    $body .= "<p>Vous êtes bien inscrit(e) aux cours suivants :</p>";
+    $body .= "<ul>";
+    foreach ($cours_info as $cours) {
+        $body .= "<li><strong>" . date('d/m/Y', strtotime($cours['Date'])) . "</strong></li>";
+    }
+    $body .= "</ul>";
+    $body .= "<p>Lieu : Espace Daniel Balavoine<br>
+              Avenue de l'Europe<br>
+              64320 Bizanos</p>";
+    $body .= "<p>La confirmation de votre inscription se fera lorsque vous aurez réglé un chèque à Mme Mundubeltz</p>";
+    $body .= "<br><p>Cordialement,<br>L'équipe Gymsync</p>";
+
+    $mail->Body = $body;
 
     // Envoi de l'email
     $mail->send();
-    echo 'L\'email a été envoyé avec succès.';
+    
 } catch (Exception $e) {
     echo "L'email n'a pas pu être envoyé. Erreur : {$mail->ErrorInfo}";
 }
 ?>
+
