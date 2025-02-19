@@ -8,27 +8,56 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
 
 require_once 'Connexion.php';
 
+$message = '';
+$messageType = '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nom = htmlspecialchars($_POST['nom']);
-    $prenom = htmlspecialchars($_POST['prenom']);
-    $code = substr(bin2hex(random_bytes(4)), 0, 8); 
+    if (isset($_POST['generate_code'])) {
+        $nom = htmlspecialchars($_POST['nom']);
+        $prenom = htmlspecialchars($_POST['prenom']);
+        $code = substr(bin2hex(random_bytes(4)), 0, 8); 
 
-    try {
-        $sql = "SELECT * FROM membre WHERE Nom = :nom AND Prenom = :prenom";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([ ':nom' => $nom, ':prenom' => $prenom ]);
-        $membre = $stmt->fetch();
+        try {
+            $sql = "SELECT * FROM membre WHERE Nom = :nom AND Prenom = :prenom";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([ ':nom' => $nom, ':prenom' => $prenom ]);
+            $membre = $stmt->fetch();
 
-        if ($membre) {
-            $updateSql = "UPDATE membre SET Code = :code WHERE Identifiant = :id";
-            $updateStmt = $pdo->prepare($updateSql);
-            $updateStmt->execute([ ':code' => $code, ':id' => $membre['Identifiant'] ]);
-            echo "<script>alert('Code généré : $code pour $nom $prenom');</script>";
-        } else {
-            echo "<script>alert('Membre introuvable.');</script>";
+            if ($membre) {
+                $updateSql = "UPDATE membre SET Code = :code WHERE Identifiant = :id";
+                $updateStmt = $pdo->prepare($updateSql);
+                $updateStmt->execute([ ':code' => $code, ':id' => $membre['Identifiant'] ]);
+                $message = "Code généré : $code pour $nom $prenom";
+                $messageType = 'success';
+            } else {
+                $message = "Membre introuvable.";
+                $messageType = 'danger';
+            }
+        } catch (PDOException $e) {
+            $message = "Erreur : " . $e->getMessage();
+            $messageType = 'danger';
         }
-    } catch (PDOException $e) {
-        echo "<script>alert('Erreur : " . $e->getMessage() . "');</script>";
+    }
+
+    if (isset($_POST['add_course'])) {
+        $date = htmlspecialchars($_POST['date']);
+        $places = intval($_POST['places']);
+        $professor = htmlspecialchars($_POST['professor']);
+
+        try {
+            $sql = "INSERT INTO cours (Date, Place, Professeur) VALUES (:date, :places, :professor)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':date' => $date,
+                ':places' => $places,
+                ':professor' => $professor
+            ]);
+            $message = "Cours ajouté avec succès.";
+            $messageType = 'success';
+        } catch (PDOException $e) {
+            $message = "Erreur lors de l'ajout du cours : " . $e->getMessage();
+            $messageType = 'danger';
+        }
     }
 }
 ?>
@@ -38,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Générer un Code d'Accès</title>
+    <title>Espace Administrateur</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -55,10 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <li class="nav-item me-3"><a class="nav-link" href="inscription.php">Inscription</a></li>
                 <li class="nav-item me-3"><a class="nav-link" href="Liste.php">Liste des Cours</a></li>
                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
-                        <li class="nav-item me-3">
-                            <a href="Administrateur.php" class="nav-link">Admin</a>
-                        </li>
-                    <?php } ?>
+                    <li class="nav-item me-3">
+                        <a href="Administrateur.php" class="nav-link">Admin</a>
+                    </li>
+                <?php } ?>
                 <?php if (isset($_SESSION['role'])) { ?>
                     <li class="nav-item"><a href="logout.php" class="btn btn-danger">Déconnexion</a></li>
                 <?php } ?>
@@ -68,14 +97,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </nav>
 
 <header class="bg-dark text-white text-center py-3">
-    <h1>Générer un Code d'Accès</h1>
+    <h1>Espace Administrateur</h1>
 </header>
 
 <div class="container my-4">
+    <?php if ($message): ?>
+        <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
+            <?php echo $message; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card p-4 shadow">
-                <h3 class="text-center">Recherche Membre</h3>
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Code Generateur</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
                         <label for="nom" class="form-label">Nom</label>
@@ -85,7 +121,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="prenom" class="form-label">Prénom</label>
                         <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prénom" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Générer Code</button>
+                    <button type="submit" name="generate_code" class="btn btn-primary w-100">Générer Code</button>
+                </form>
+            </div>
+
+            <div class="card p-4 shadow">
+                <h3 class="text-center">Ajouter un Cours</h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="places" class="form-label">Nombre de Places</label>
+                        <input type="number" class="form-control" id="places" name="places" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="professor" class="form-label">Professeur</label>
+                        <input type="text" class="form-control" id="professor" name="professor" required>
+                    </div>
+                    <button type="submit" name="add_course" class="btn btn-primary w-100">Ajouter le Cours</button>
                 </form>
             </div>
         </div>
@@ -99,3 +154,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

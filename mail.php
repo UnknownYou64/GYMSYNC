@@ -34,7 +34,7 @@ try {
         <p>Lieu : Espace Daniel Balavoine<br>
                   Avenue de l'Europe<br>
                   64320 Bizanos</p>
-        <p>Nous avons hâte de vous voir !</p>
+        <p>La confirmations de votre inscription se fera lorsque vous aurez reglez un cheque a Mme Mundubeltz</p>
         <br>
         <p>Cordialement,<br>L'équipe Gymsync</p>";
 
