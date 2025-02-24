@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ':membre_id' => $membre_id
                 ]);
 
-                // Récupérer les informations du cours
+                
                 $sql_cours = "SELECT Date FROM cours WHERE IDC = :id_cours";
                 $stmt_cours = $pdo->prepare($sql_cours);
                 $stmt_cours->execute([':id_cours' => $cours_id]);
