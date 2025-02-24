@@ -1,0 +1,44 @@
+body {
+    /* background-color: #06070a; */
+    color: #ffffff;
+}
+
+.navbar {
+    background-color: #06070a;
+}
+
+.navbar-brand, .nav-link {
+    color: #ffc01d !important;
+}
+
+.nav-link.active {
+    color: #7231ff !important;
+}
+
+.btn-danger {
+    background-color: #7231ff;
+    border-color: #7231ff;
+}
+
+header, footer {
+    background-color: #06070a;
+}
+
+header h1, footer p {
+    color: #ffc01d;
+}
+
+.bg-light {
+    background-color: #ffc01d !important;
+    color: #06070a !important;
+}
+
+.bg-secondary {
+    background-color: #7231ff !important;
+    color: #ffffff !important;
+}
+
+.bg-dark {
+    background-color: #06070a !important;
+    color: #ffffff !important;
+}
