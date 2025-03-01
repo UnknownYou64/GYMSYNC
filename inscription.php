@@ -14,12 +14,22 @@ require_once 'Connexion.php';
 
 try {
     $sql = "
-        SELECT c.IDC, c.Date, (c.Place - IFNULL(COUNT(r.IDC), 0)) AS places_restantes
+        SELECT c.IDC,c.Jour,c.Heure,c.Nature,c.Place,c.Professeur,(c.Place - IFNULL(COUNT(r.IDC), 0)) AS places_restantes
         FROM cours c
         LEFT JOIN reservation r ON c.IDC = r.idC
-        GROUP BY c.IDC, c.Date, c.Place
+        GROUP BY c.IDC, c.Jour, c.Heure, c.Nature, c.Place, c.Professeur
         HAVING places_restantes > 0
-        ORDER BY c.Date ASC
+        ORDER BY 
+            CASE 
+                WHEN c.Jour = 'Lundi' THEN 1
+                WHEN c.Jour = 'Mardi' THEN 2
+                WHEN c.Jour = 'Mercredi' THEN 3
+                WHEN c.Jour = 'Jeudi' THEN 4
+                WHEN c.Jour = 'Vendredi' THEN 5
+                WHEN c.Jour = 'Samedi' THEN 6
+                WHEN c.Jour = 'Dimanche' THEN 7
+            END,
+            c.Heure ASC
     ";
 
     $stmt = $pdo->query($sql);
@@ -32,15 +42,14 @@ $message = '';
 $messageType = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom = htmlspecialchars($_POST['nom']);
-    $prenom = htmlspecialchars($_POST['prenom']);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $email = $_POST['email'];
     $cours_selectionnes = isset($_POST['cours']) ? $_POST['cours'] : [];
 
     if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($cours_selectionnes)) {
         try {
-            $pdo->beginTransaction();
-
+            
             $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :email)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
@@ -59,23 +68,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ':id_cours' => $cours_id,
                     ':membre_id' => $membre_id
                 ]);
-
                 
-                $sql_cours = "SELECT Date FROM cours WHERE IDC = :id_cours";
+                $sql_cours = "SELECT Jour, Heure FROM cours WHERE IDC = :id_cours";
                 $stmt_cours = $pdo->prepare($sql_cours);
                 $stmt_cours->execute([':id_cours' => $cours_id]);
                 $cours_info[] = $stmt_cours->fetch(PDO::FETCH_ASSOC);
             }
 
-            $pdo->commit();
-
-            // Envoie du mail
+            // envoie du mail
             require_once 'mail.php';
 
             $message = "Inscription réussie ! Un e-mail de confirmation vous a été envoyé.";
             $messageType = 'success';
         } catch (PDOException $e) {
-            $pdo->rollBack();
             $message = "Erreur lors de l'inscription : " . $e->getMessage();
             $messageType = 'danger';
         }
@@ -151,17 +156,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Sélectionner les cours (1 à 4)</label>
-                            <?php if (!empty($coursDisponibles)) {
-                                foreach ($coursDisponibles as $cours) { ?>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="cours[]" value="<?= $cours['IDC'] ?>" id="cours_<?= $cours['IDC'] ?>">
-                                        <label class="form-check-label" for="cours_<?= $cours['IDC'] ?>">
-                                            <?= date('d/m/Y', strtotime($cours['Date'])) ?> - Places restantes: <?= $cours['places_restantes'] ?>
-                                        </label>
-                                    </div>
-                                <?php }
-                            } else { ?>
-                                <p>Aucun cours disponible</p>
+                            <?php if (!empty($coursDisponibles)) { ?>
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Sélection</th>
+                                                <th>Jour</th>
+                                                <th>Heure</th>
+                                                <th>Nature</th>
+                                                <th>Professeur</th>
+                                                <th>Places restantes</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($coursDisponibles as $cours) { ?>
+                                                <tr>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" 
+                                                               name="cours[]" 
+                                                               value="<?= $cours['IDC'] ?>" 
+                                                               id="cours_<?= $cours['IDC'] ?>">
+                                                    </td>
+                                                    <td><?= $cours['Jour'] ?></td>
+                                                    <td><?= date('H:i', strtotime($cours['Heure'])) ?></td>
+                                                    <td><?= $cours['Nature'] ?></td>
+                                                    <td><?= $cours['Professeur'] ?></td>
+                                                    <td><?= $cours['places_restantes'] ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            <?php } else { ?>
+                                <p class="alert alert-info">Aucun cours disponible</p>
                             <?php } ?>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Envoyer</button>

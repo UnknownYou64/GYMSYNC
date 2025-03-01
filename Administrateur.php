@@ -13,8 +13,8 @@ $messageType = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generate_code'])) {
-        $nom = htmlspecialchars($_POST['nom']);
-        $prenom = htmlspecialchars($_POST['prenom']);
+        $nom = $_POST['nom'];
+        $prenom = $_POST['prenom'];
         $code = substr(bin2hex(random_bytes(4)), 0, 8); 
 
         try {
@@ -40,15 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (isset($_POST['add_course'])) {
-        $date = htmlspecialchars($_POST['date']);
-        $places = intval($_POST['places']);
-        $professor = htmlspecialchars($_POST['professor']);
+        $jour = $_POST['jour'];
+        $heure = $_POST['heure'];
+        $nature = $_POST['nature'];
+        $places = $_POST['places']; 
+        $professor = $_POST['professor'];
 
         try {
-            $sql = "INSERT INTO cours (Date, Place, Professeur) VALUES (:date, :places, :professor)";
+            $sql = "INSERT INTO cours (Jour, Heure, Nature, Place, Professeur) VALUES (:jour, :heure, :nature, :places, :professor)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([
-                ':date' => $date,
+                ':jour' => $jour,
+                ':heure' => $heure,
+                ':nature' => $nature,
                 ':places' => $places,
                 ':professor' => $professor
             ]);
@@ -129,8 +133,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <h3 class="text-center">Ajouter un Cours</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
-                        <label for="date" class="form-label">Date</label>
-                        <input type="date" class="form-control" id="date" name="date" required>
+                        <label for="jour" class="form-label">Jour</label>
+                        <select class="form-control" id="jour" name="jour" required>
+                            <option value="">Sélectionner un jour</option>
+                            <option value="Lundi">Lundi</option>
+                            <option value="Mardi">Mardi</option>
+                            <option value="Mercredi">Mercredi</option>
+                            <option value="Jeudi">Jeudi</option>
+                            <option value="Vendredi">Vendredi</option>
+                            <option value="Samedi">Samedi</option>
+                            <option value="Dimanche">Dimanche</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="heure" class="form-label">Heure</label>
+                        <input type="time" class="form-control" id="heure" name="heure" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nature" class="form-label">Nature du cours</label>
+                        <input type="text" class="form-control" id="nature" name="nature" placeholder="Ex: Yoga, Pilates, etc." required>
                     </div>
                     <div class="mb-3">
                         <label for="places" class="form-label">Nombre de Places</label>

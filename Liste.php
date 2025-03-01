@@ -17,12 +17,28 @@ require_once 'Connexion.php';
 
 try {
     $sql = "
-        SELECT c.Date, c.Place, c.Professeur, 
-        (c.Place - IFNULL(COUNT(r.IDC), 0)) AS places_restantes
+        SELECT 
+            c.IDC,
+            c.Jour,
+            c.Heure,
+            c.Place,
+            c.Nature,
+            c.Professeur,
+            (c.Place - IFNULL(COUNT(r.IDC), 0)) AS places_restantes
         FROM cours c
         LEFT JOIN reservation r ON c.IDC = r.idC
-        GROUP BY c.IDC, c.Date, c.Place, c.Professeur
-        ORDER BY c.Date ASC
+        GROUP BY c.IDC, c.Jour, c.Heure, c.Place, c.Nature, c.Professeur
+        ORDER BY 
+            CASE 
+                WHEN c.Jour = 'Lundi' THEN 1
+                WHEN c.Jour = 'Mardi' THEN 2
+                WHEN c.Jour = 'Mercredi' THEN 3
+                WHEN c.Jour = 'Jeudi' THEN 4
+                WHEN c.Jour = 'Vendredi' THEN 5
+                WHEN c.Jour = 'Samedi' THEN 6
+                WHEN c.Jour = 'Dimanche' THEN 7
+            END,
+            c.Heure ASC
     ";
 
     $stmt = $pdo->query($sql);
@@ -73,17 +89,21 @@ try {
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th class="w-20">Date</th>
-                    <th class="w-25">Nombre de Places</th>
-                    <th class="w-25">Places restantes</th>
-                    <th class="w-30">Professeur</th>
+                    <th class="w-15">Jour</th>
+                    <th class="w-15">Heure</th>
+                    <th class="w-20">Nature du cours</th>
+                    <th class="w-15">Places totales</th>
+                    <th class="w-15">Places restantes</th>
+                    <th class="w-20">Professeur</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (!empty($cours)) { ?>
                     <?php foreach ($cours as $coursItem) { ?>
                         <tr>
-                            <td><?= date('d/m/Y', strtotime($coursItem['Date'])) ?></td>
+                            <td><?= htmlspecialchars($coursItem['Jour']) ?></td>
+                            <td><?= date('H:i', strtotime($coursItem['Heure'])) ?></td>
+                            <td><?= htmlspecialchars($coursItem['Nature']) ?></td>
                             <td><?= $coursItem['Place'] ?></td>
                             <td>
                                 <?php
@@ -94,12 +114,12 @@ try {
                                 }
                                 ?>
                             </td>
-                            <td><?= $coursItem['Professeur'] ?></td>
+                            <td><?= htmlspecialchars($coursItem['Professeur']) ?></td>
                         </tr>
                     <?php } ?>
                 <?php } else { ?>
                     <tr>
-                        <td colspan="4" class="text-center">Aucun cours disponible.</td>
+                        <td colspan="6" class="text-center">Aucun cours disponible.</td>
                     </tr>
                 <?php } ?>
             </tbody>
