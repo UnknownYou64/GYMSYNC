@@ -10,6 +10,7 @@ if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "adm
     header('Location: index.php');
     exit;
 }
+//bzei
 ?>
 
 <?php
