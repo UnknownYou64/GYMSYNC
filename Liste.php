@@ -101,9 +101,9 @@ try {
                 <?php if (!empty($cours)) { ?>
                     <?php foreach ($cours as $coursItem) { ?>
                         <tr>
-                            <td><?= htmlspecialchars($coursItem['Jour']) ?></td>
+                            <td><?= $coursItem['Jour'] ?></td>
                             <td><?= date('H:i', strtotime($coursItem['Heure'])) ?></td>
-                            <td><?= htmlspecialchars($coursItem['Nature']) ?></td>
+                            <td><?= $coursItem['Nature'] ?></td>
                             <td><?= $coursItem['Place'] ?></td>
                             <td>
                                 <?php
@@ -114,7 +114,7 @@ try {
                                 }
                                 ?>
                             </td>
-                            <td><?= htmlspecialchars($coursItem['Professeur']) ?></td>
+                            <td><?= $coursItem['Professeur'] ?></td>
                         </tr>
                     <?php } ?>
                 <?php } else { ?>
