@@ -12,6 +12,7 @@ if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "adm
 }
 require_once 'Connexion.php';
 
+//SQL
 try {
     $sql = "
         SELECT c.IDC,c.Jour,c.Heure,c.Nature,c.Place,c.Professeur,(c.Place - IFNULL(COUNT(r.IDC), 0)) AS places_restantes
