@@ -63,6 +63,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $messageType = 'danger';
         }
     }
+
+    if (isset($_POST['add_member'])) {
+        $nom = $_POST['nom_member'];
+        $prenom = $_POST['prenom_member'];
+        $mail = $_POST['mail_member'];
+        
+        try {
+            $checkSql = "SELECT * FROM membre WHERE Mail = :mail";
+            $checkStmt = $pdo->prepare($checkSql);
+            $checkStmt->execute([':mail' => $mail]);
+            
+            if ($checkStmt->rowCount() > 0) {
+                $message = "Un membre avec cette adresse email existe déjà.";
+                $messageType = 'danger';
+            } else {
+                $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :mail)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([
+                    ':nom' => $nom,
+                    ':prenom' => $prenom,
+                    ':mail' => $mail
+                ]);
+                $message = "Membre ajouté avec succès.";
+                $messageType = 'success';
+            }
+        } catch (PDOException $e) {
+            $message = "Erreur lors de l'ajout du membre : " . $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
 }
 ?>
 
@@ -162,6 +192,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <input type="text" class="form-control" id="professor" name="professor" required>
                     </div>
                     <button type="submit" name="add_course" class="btn btn-primary w-100">Ajouter le Cours</button>
+                </form>
+            </div>
+
+            <div class="card p-4 shadow mt-4">
+                <h3 class="text-center">Ajouter un Membre</h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="mb-3">
+                        <label for="nom_member" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="nom_member" name="nom_member" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="prenom_member" class="form-label">Prénom</label>
+                        <input type="text" class="form-control" id="prenom_member" name="prenom_member" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="mail_member" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="mail_member" name="mail_member" required>
+                    </div>
+                    <button type="submit" name="add_member" class="btn btn-primary w-100">Ajouter le Membre</button>
                 </form>
             </div>
         </div>
