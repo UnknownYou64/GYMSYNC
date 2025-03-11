@@ -54,6 +54,25 @@ session_start();
 
 <div class="container my-4">
     <div class="row">
+                <!--
+    ici le code pour les informations necessaire a la presentation du site pour la page d'acceuil 
+    voici le site ou prendre les information : http://gymavenirbizanos.free.fr/index.html             
+    on doit retrouver les informations suivantes :
+    - les horaires d'ouverture
+    - les cours proposés
+    - les tarifs
+    - le lieu
+    - les contacts
+    - les actualités
+    - les photos ( optionnel ) a voir avec la professeur
+                
+                
+                
+        Soit vous garder le code ci dessous soit vous le supprimer et vous le refaite a votre maniere
+                -->
+
+
+
         <div class="col-md-4 bg-light p-3">c1</div>
         <div class="col-md-4 bg-secondary text-white p-3">c2</div>
         <div class="col-md-4 bg-dark text-white p-3">c3</div>
