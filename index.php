@@ -55,6 +55,12 @@ session_start();
 <div class="container my-4">
     <div class="row">
                 <!--
+
+
+
+
+
+
     ici le code pour les informations necessaire a la presentation du site pour la page d'acceuil 
     voici le site ou prendre les information : http://gymavenirbizanos.free.fr/index.html             
     on doit retrouver les informations suivantes :
@@ -69,6 +75,12 @@ session_start();
                 
                 
         Soit vous garder le code ci dessous soit vous le supprimer et vous le refaite a votre maniere
+
+
+
+
+
+        
                 -->
 
 

@@ -1,36 +1,38 @@
 <?php
 session_start();
-require_once 'Connexion.php'; 
+require_once __DIR__ . '/dao/MembreDao.php';
 
-/* mdp et identifiant de l'admin */
-$admin_email = "admin@gmail.com";
-$admin_password = "admin";
+$message = '';
+$messageType = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password'];
+    try {
+        $membreDao = new MembreDao();
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'];
 
-    if ($email === $admin_email && $password === $admin_password) {
-        $_SESSION['role'] = "admin";
-        $_SESSION['email'] = $email;
-        header('Location: Administrateur.php');
-        exit;
-    } 
-    else {
-        $sql = "SELECT * FROM membre WHERE Mail = :email AND Code IS NOT NULL";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([':email' => $email]);
-        $membre = $stmt->fetch();
+        $resultat = $membreDao->verifierConnexion($email, $password);
 
-        if ($membre) {
-            $_SESSION['role'] = "membre";
-            $_SESSION['email'] = $membre['Mail'];
-            header('Location: index.php');
+        if ($resultat) {
+            $_SESSION['role'] = $resultat['role'];
+            $_SESSION['email'] = $resultat['email'];
+            if (isset($resultat['id'])) {
+                $_SESSION['id'] = $resultat['id'];
+            }
+            
+            if ($resultat['role'] === 'admin') {
+                header('Location: Administrateur.php');
+            } else {
+                header('Location: index.php');
+            }
             exit;
-        } 
-        else {
-            echo "<script>alert('Connexion échouée. Vérifiez vos informations.');</script>";
+        } else {
+            $message = 'Email ou mot de passe incorrect.';
+            $messageType = 'danger';
         }
+    } catch (Exception $e) {
+        $message = "Une erreur est survenue lors de la connexion.";
+        $messageType = 'danger';
     }
 }
 ?>
@@ -40,48 +42,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
+    <title>Connexion - GYMSYNC</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Mon Site</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="index.php">Accueil</a>
-                </li>
-            </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.php">GYMSYNC</a>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card p-4 shadow">
-                <h3 class="text-center">Connexion</h3>
-                <form method="POST" action="login.php">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Votre e-mail" required>
+    <div class="container my-5">
+        <?php if ($message): ?>
+            <div class="alert alert-<?= $messageType ?> alert-dismissible fade show" role="alert">
+                <?= htmlspecialchars($message) ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <?php endif; ?>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title text-center mb-4">Connexion</h2>
+                        <form method="POST" action="Login.php">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mot de passe</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Se connecter</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-                </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

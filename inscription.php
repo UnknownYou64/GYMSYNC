@@ -10,32 +10,13 @@ if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "adm
     header('Location: index.php');
     exit;
 }
-require_once 'Connexion.php';
 
-//SQL
+require_once __DIR__ . '/dao/MembreDao.php';
+
 try {
-    $sql = "
-        SELECT c.IDC,c.Jour,c.Heure,c.Nature,c.Place,c.Professeur,(c.Place - IFNULL(COUNT(r.IDC), 0)) AS places_restantes
-        FROM cours c
-        LEFT JOIN reservation r ON c.IDC = r.idC
-        GROUP BY c.IDC, c.Jour, c.Heure, c.Nature, c.Place, c.Professeur
-        HAVING places_restantes > 0
-        ORDER BY 
-            CASE 
-                WHEN c.Jour = 'Lundi' THEN 1
-                WHEN c.Jour = 'Mardi' THEN 2
-                WHEN c.Jour = 'Mercredi' THEN 3
-                WHEN c.Jour = 'Jeudi' THEN 4
-                WHEN c.Jour = 'Vendredi' THEN 5
-                WHEN c.Jour = 'Samedi' THEN 6
-                WHEN c.Jour = 'Dimanche' THEN 7
-            END,
-            c.Heure ASC
-    ";
-
-    $stmt = $pdo->query($sql);
-    $coursDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+    $membreDao = new MembreDao();
+    $coursDisponibles = $membreDao->recupererCoursDisponibles();
+} catch (Exception $e) {
     die("Erreur : " . $e->getMessage());
 }
 
@@ -50,38 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($cours_selectionnes)) {
         try {
+            $resultat = $membreDao->inscrireMembreEtCours($nom, $prenom, $email, $cours_selectionnes);
             
-            $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :email)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':nom' => $nom,
-                ':prenom' => $prenom,
-                ':email' => $email
-            ]);
+            // Préparation des données pour l'email
+            $cours_info = $resultat['cours_info'];
             
-            $membre_id = $pdo->lastInsertId();
-
-            $cours_info = [];
-            foreach ($cours_selectionnes as $cours_id) {
-                $sql_reservation = "INSERT INTO reservation (IDC, Identifiant) VALUES (:id_cours, :membre_id)";
-                $stmt_reservation = $pdo->prepare($sql_reservation);
-                $stmt_reservation->execute([
-                    ':id_cours' => $cours_id,
-                    ':membre_id' => $membre_id
-                ]);
-                
-                $sql_cours = "SELECT Jour, Heure FROM cours WHERE IDC = :id_cours";
-                $stmt_cours = $pdo->prepare($sql_cours);
-                $stmt_cours->execute([':id_cours' => $cours_id]);
-                $cours_info[] = $stmt_cours->fetch(PDO::FETCH_ASSOC);
-            }
-
-            // envoie du mail
+            // Envoi du mail avec les informations des cours
             require_once 'mail.php';
 
             $message = "Inscription réussie ! Un e-mail de confirmation vous a été envoyé.";
             $messageType = 'success';
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $message = "Erreur lors de l'inscription : " . $e->getMessage();
             $messageType = 'danger';
         }

@@ -140,6 +140,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <!-- 
 
+
+
+
+
+
+
 Dans la page administrateur je veux mettre des instructions a suivre pour chaque fonctionnalité 
 je veux les mettre a droite et a gauche de la page 
 dire ce que sa modifie et ce que sa ajoute 
@@ -149,7 +155,23 @@ dire ce que sa modifie et ce que sa ajoute
 et en bas de page afficher un historique des actions effectuées par l'administrateur (petits historique sans boutons revennir a l'etat precedent)
 
 
+
 a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier technique ou envoyer un sms/whatsapp a un numero de telephone (0786448613)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
