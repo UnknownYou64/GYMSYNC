@@ -66,7 +66,7 @@ class MembreDao extends BaseDonneeDao {
             
             $membreId = $this->pdo->lastInsertId();
 
-            // Insertion des réservations
+            
             $requeteReservation = "INSERT INTO reservation (IDC, Identifiant) VALUES (:idCours, :idMembre)";
             $declarationReservation = $this->pdo->prepare($requeteReservation);
 
