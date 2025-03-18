@@ -55,7 +55,7 @@ class MembreDao extends BaseDonneeDao {
                 throw new Exception("Cette adresse email est déjà utilisée.");
             }
 
-            // Insertion du membre
+            
             $requeteMembre = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :email)";
             $declarationMembre = $this->pdo->prepare($requeteMembre);
             $declarationMembre->execute([
