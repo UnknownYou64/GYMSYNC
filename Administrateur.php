@@ -7,93 +7,67 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
 }
 
 require_once 'Connexion.php';
+require_once 'dao/BaseDonneeDao.php';
+require_once 'dao/CoursDao.php';
+require_once 'dao/MembreDao.php';
+
+// Initialisation des DAO
+$coursDao = new CoursDao();
+$membreDao = new MembreDao();
 
 $message = '';
 $messageType = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generate_code'])) {
-        $nom = $_POST['nom'];
-        $prenom = $_POST['prenom'];
-        $code = substr(bin2hex(random_bytes(4)), 0, 8); 
-
         try {
-            $sql = "SELECT * FROM membre WHERE Nom = :nom AND Prenom = :prenom";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([ ':nom' => $nom, ':prenom' => $prenom ]);
-            $membre = $stmt->fetch();
-
-            if ($membre) {
-                $updateSql = "UPDATE membre SET Code = :code WHERE Identifiant = :id";
-                $updateStmt = $pdo->prepare($updateSql);
-                $updateStmt->execute([ ':code' => $code, ':id' => $membre['Identifiant'] ]);
-                $message = "Code généré : $code pour $nom $prenom";
-                $messageType = 'success';
-            } else {
-                $message = "Membre introuvable.";
-                $messageType = 'danger';
-            }
-        } catch (PDOException $e) {
-            $message = "Erreur : " . $e->getMessage();
+            $nom = $_POST['nom'];
+            $prenom = $_POST['prenom'];
+            $code = $membreDao->genererCode($nom, $prenom);
+            
+            $message = "Code généré : $code pour $nom $prenom";
+            $messageType = 'success';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
             $messageType = 'danger';
         }
     }
 
     if (isset($_POST['add_course'])) {
-        $jour = $_POST['jour'];
-        $heure = $_POST['heure'];
-        $nature = $_POST['nature'];
-        $places = $_POST['places']; 
-        $professor = $_POST['professor'];
-
         try {
-            $sql = "INSERT INTO cours (Jour, Heure, Nature, Place, Professeur) VALUES (:jour, :heure, :nature, :places, :professor)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':jour' => $jour,
-                ':heure' => $heure,
-                ':nature' => $nature,
-                ':places' => $places,
-                ':professor' => $professor
-            ]);
+            $jour = $_POST['jour'];
+            $heure = $_POST['heure'];
+            $nature = $_POST['nature'];
+            $places = $_POST['places']; 
+            $professor = $_POST['professor'];
+
+            $coursId = $coursDao->ajouterCours($jour, $heure, $nature, $places, $professor);
+            
             $message = "Cours ajouté avec succès.";
             $messageType = 'success';
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $message = "Erreur lors de l'ajout du cours : " . $e->getMessage();
             $messageType = 'danger';
         }
     }
 
     if (isset($_POST['add_member'])) {
-        $nom = $_POST['nom_member'];
-        $prenom = $_POST['prenom_member'];
-        $mail = $_POST['mail_member'];
-        
         try {
-            $checkSql = "SELECT * FROM membre WHERE Mail = :mail";
-            $checkStmt = $pdo->prepare($checkSql);
-            $checkStmt->execute([':mail' => $mail]);
+            $nom = $_POST['nom_member'];
+            $prenom = $_POST['prenom_member'];
+            $mail = $_POST['mail_member'];
             
-            if ($checkStmt->rowCount() > 0) {
-                $message = "Un membre avec cette adresse email existe déjà.";
-                $messageType = 'danger';
-            } else {
-                $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :mail)";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([
-                    ':nom' => $nom,
-                    ':prenom' => $prenom,
-                    ':mail' => $mail
-                ]);
-                $message = "Membre ajouté avec succès.";
-                $messageType = 'success';
-            }
-        } catch (PDOException $e) {
-            $message = "Erreur lors de l'ajout du membre : " . $e->getMessage();
+            $membreId = $membreDao->ajouterMembre($nom, $prenom, $mail);
+            
+            $message = "Membre ajouté avec succès.";
+            $messageType = 'success';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
             $messageType = 'danger';
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -130,53 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </nav>
 
-
-
-
 <header class="bg-dark text-white text-center py-3">
     <h1>Espace Administrateur</h1>
 </header>
-
-
-<!-- 
-
-
-
-
-
-
-
-Dans la page administrateur je veux mettre des instructions a suivre pour chaque fonctionnalité 
-je veux les mettre a droite et a gauche de la page 
-dire ce que sa modifie et ce que sa ajoute 
-
-
-
-et en bas de page afficher un historique des actions effectuées par l'administrateur (petits historique sans boutons revennir a l'etat precedent)
-
-
-
-a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier technique ou envoyer un sms/whatsapp a un numero de telephone (0786448613)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--->
 
 <div class="container my-4">
     <?php if ($message): ?>

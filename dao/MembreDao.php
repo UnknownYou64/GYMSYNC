@@ -98,50 +98,60 @@ class MembreDao extends BaseDonneeDao {
         return $declaration->fetchColumn() > 0;
     }
 
+    
+
+    
+
     /**
-     * Récupère les informations des cours sélectionnés
+     * Génère un code pour un membre existant
      */
-    private function recupererInfosCours($coursIds) {
+    public function genererCode($nom, $prenom) {
         try {
-            $placeholders = str_repeat('?,', count($coursIds) - 1) . '?';
-            $requete = "SELECT Jour, Heure, Nature FROM cours WHERE IDC IN ($placeholders)";
-            $declaration = $this->pdo->prepare($requete);
-            $declaration->execute($coursIds);
-            return $declaration->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "SELECT * FROM membre WHERE Nom = :nom AND Prenom = :prenom";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':nom' => $nom, ':prenom' => $prenom]);
+            $membre = $stmt->fetch();
+
+            if (!$membre) {
+                throw new Exception("Membre introuvable.");
+            }
+
+            $code = substr(bin2hex(random_bytes(4)), 0, 8);
+            
+            $updateSql = "UPDATE membre SET Code = :code WHERE Identifiant = :id";
+            $updateStmt = $this->pdo->prepare($updateSql);
+            $updateStmt->execute([
+                ':code' => $code,
+                ':id' => $membre['Identifiant']
+            ]);
+
+            return $code;
         } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la récupération des informations des cours: " . $e->getMessage());
+            throw new Exception("Erreur lors de la génération du code: " . $e->getMessage());
         }
     }
 
     /**
-     * Récupère les cours disponibles
+     * Ajoute un nouveau membre
      */
-    public function recupererCoursDisponibles() {
+    public function ajouterMembre($nom, $prenom, $email) {
         try {
-            $requete = "
-                SELECT c.IDC, c.Jour, c.Heure, c.Nature, c.Place, c.Professeur,
-                    (c.Place - COALESCE(
-                        (SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC), 
-                        0
-                    )) as places_restantes
-                FROM cours c
-                WHERE c.Place > (
-                    SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC
-                )
-                ORDER BY 
-                    CASE 
-                        WHEN c.Jour = 'Lundi' THEN 1
-                        WHEN c.Jour = 'Mardi' THEN 2
-                        WHEN c.Jour = 'Mercredi' THEN 3
-                        WHEN c.Jour = 'Jeudi' THEN 4
-                        WHEN c.Jour = 'Vendredi' THEN 5
-                    END,
-                    c.Heure ASC";
-            
-            $declaration = $this->pdo->query($requete);
-            return $declaration->fetchAll(PDO::FETCH_ASSOC);
+            // Vérification si l'email existe déjà
+            if ($this->emailExiste($email)) {
+                throw new Exception("Cette adresse email est déjà utilisée.");
+            }
+
+            $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :mail)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':nom' => $nom,
+                ':prenom' => $prenom,
+                ':mail' => $email
+            ]);
+
+            return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la récupération des cours: " . $e->getMessage());
+            throw new Exception("Erreur lors de l'ajout du membre: " . $e->getMessage());
         }
     }
 }

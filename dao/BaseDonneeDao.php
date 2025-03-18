@@ -72,4 +72,11 @@ abstract class BaseDonneeDao {
             throw new Exception("Erreur lors de la vérification: " . $e->getMessage());
         }
     }
+
+    private function emailExiste($email) {
+        $requete = "SELECT COUNT(*) FROM membre WHERE Mail = :email";
+        $declaration = $this->pdo->prepare($requete);
+        $declaration->execute([':email' => $email]);
+        return $declaration->fetchColumn() > 0;
+    }
 }
