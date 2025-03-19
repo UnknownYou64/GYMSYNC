@@ -10,12 +10,12 @@ class CoursDao extends BaseDonneeDao {
     public function recupererCoursDisponibles() {
         try {
             $requete = "SELECT c.*, 
-                    (c.NbPlaces - COALESCE(
+                    (c.Place - COALESCE(
                         (SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC), 
                         0
                     )) as places_restantes 
                     FROM cours c 
-                    WHERE c.NbPlaces > COALESCE(
+                    WHERE c.Place > COALESCE(
                         (SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC), 
                         0
                     )
@@ -166,6 +166,78 @@ class CoursDao extends BaseDonneeDao {
             return $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de l'ajout du cours: " . $e->getMessage());
+        }
+    }
+
+    public function inscrireAuxCours($membre_id, $cours_selectionnes) {
+        try {
+            $this->pdo->beginTransaction();
+
+            foreach ($cours_selectionnes as $cours_id) {
+                $this->inscrireAuCours($membre_id, $cours_id);
+            }
+
+            $this->pdo->commit();
+        } catch (Exception $e) {
+            $this->pdo->rollBack();
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    /**
+     * Inscrit un membre à un cours spécifique
+     */
+    public function inscrireAuCours($membre_id, $cours_id) {
+        try {
+            // Vérification des places disponibles
+            $places_restantes = $this->recupererPlacesRestantes($cours_id);
+            if ($places_restantes <= 0) {
+                throw new Exception("Plus de places disponibles pour ce cours.");
+            }
+
+            // Vérification si déjà inscrit
+            $sql = "SELECT COUNT(*) FROM reservation WHERE IDC = :cours_id AND Identifiant = :membre_id";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':cours_id' => $cours_id,
+                ':membre_id' => $membre_id
+            ]);
+            
+            if ($stmt->fetchColumn() > 0) {
+                throw new Exception("Vous êtes déjà inscrit à ce cours.");
+            }
+
+            // Inscription au cours
+            $sql = "INSERT INTO reservation (IDC, Identifiant) VALUES (:cours_id, :membre_id)";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([
+                ':cours_id' => $cours_id,
+                ':membre_id' => $membre_id
+            ]);
+
+            return true;
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de l'inscription au cours: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Récupère les informations détaillées des cours sélectionnés
+     */
+    public function getCoursInfo($coursIds) {
+        try {
+            $placeholders = str_repeat('?,', count($coursIds) - 1) . '?';
+            $sql = "SELECT IDC, Jour, Heure, Nature, Professeur, 
+                    (Place - COALESCE((SELECT COUNT(*) FROM reservation r WHERE r.IDC = cours.IDC), 0)) as places_restantes
+                    FROM cours 
+                    WHERE IDC IN ($placeholders)
+                    ORDER BY Jour, Heure";
+                    
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($coursIds);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des informations des cours: " . $e->getMessage());
         }
     }
 }

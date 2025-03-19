@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/BaseDonneeDao.php';
+require_once __DIR__ . '/CoursDao.php';
 
 class MembreDao extends BaseDonneeDao {
     private $admin_email = "admin@gmail.com";
@@ -154,4 +155,6 @@ class MembreDao extends BaseDonneeDao {
             throw new Exception("Erreur lors de l'ajout du membre: " . $e->getMessage());
         }
     }
+
+    
 }

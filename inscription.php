@@ -6,16 +6,16 @@ if (!isset($_SESSION['role'])) {
     exit;
 }
 
-if ($_SERVER['PHP_SELF'] === "/Administrateur.php" && $_SESSION['role'] !== "admin") {
-    header('Location: index.php');
-    exit;
-}
-
 require_once __DIR__ . '/dao/MembreDao.php';
+require_once __DIR__ . '/dao/CoursDao.php';
 
+// Initialisation des DAO
+$membreDao = new MembreDao();
+$coursDao = new CoursDao();
+
+// Récupération des cours disponibles
 try {
-    $membreDao = new MembreDao();
-    $coursDisponibles = $membreDao->recupererCoursDisponibles();
+    $coursDisponibles = $coursDao->recupererCoursDisponibles();
 } catch (Exception $e) {
     die("Erreur : " . $e->getMessage());
 }
@@ -23,30 +23,39 @@ try {
 $message = '';
 $messageType = '';
 
+// Remplacer la partie du code qui récupère l'ID du membre
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
     $cours_selectionnes = isset($_POST['cours']) ? $_POST['cours'] : [];
 
-    if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($cours_selectionnes)) {
+    if (!empty($cours_selectionnes)) {
         try {
-            $resultat = $membreDao->inscrireMembreEtCours($nom, $prenom, $email, $cours_selectionnes);
+            // Récupération de l'ID du membre depuis la session
+            if (!isset($_SESSION['id'])) {
+                throw new Exception("Vous devez être connecté pour vous inscrire aux cours.");
+            }
+            $membre_id = $_SESSION['id'];
             
-            // Préparation des données pour l'email
-            $cours_info = $resultat['cours_info'];
+            // Vérifier le nombre de cours sélectionnés
+            if (count($cours_selectionnes) > 4) {
+                throw new Exception("Vous ne pouvez sélectionner que 4 cours maximum.");
+            }
+
+            // Inscrire aux cours sélectionnés
+            $coursDao->inscrireAuxCours($membre_id, $cours_selectionnes);
             
-            // Envoi du mail avec les informations des cours
+            // Récupérer les informations des cours pour l'email
+            $cours_info = $coursDao->getCoursInfo($cours_selectionnes);
+            
             require_once 'mail.php';
 
-            $message = "Inscription réussie ! Un e-mail de confirmation vous a été envoyé.";
+            $message = "Inscription aux cours réussie ! Un e-mail de confirmation vous a été envoyé.";
             $messageType = 'success';
         } catch (Exception $e) {
-            $message = "Erreur lors de l'inscription : " . $e->getMessage();
+            $message = "Erreur lors de l'inscription aux cours : " . $e->getMessage();
             $messageType = 'danger';
         }
     } else {
-        $message = "Veuillez remplir tous les champs et sélectionner au moins un cours.";
+        $message = "Veuillez sélectionner au moins un cours.";
         $messageType = 'warning';
     }
 }
@@ -101,20 +110,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card p-4 shadow">
-                    <h3 class="text-center">Remplissez le formulaire</h3>
+                    <h3 class="text-center">Sélection des cours</h3>
                     <form method="POST" action="inscription.php">
-                        <div class="mb-3">
-                            <label for="nom" class="form-label">Nom</label>
-                            <input type="text" class="form-control" id="nom" name="nom" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="prenom" class="form-label">Prénom</label>
-                            <input type="text" class="form-control" id="prenom" name="prenom" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Adresse e-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
                         <div class="mb-3">
                             <label class="form-label">Sélectionner les cours (1 à 4)</label>
                             <?php if (!empty($coursDisponibles)) { ?>
@@ -153,7 +150,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <p class="alert alert-info">Aucun cours disponible</p>
                             <?php } ?>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+                        <button type="submit" class="btn btn-primary w-100">S'inscrire aux cours</button>
                     </form>
                 </div>
             </div>
