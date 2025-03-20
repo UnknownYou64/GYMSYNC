@@ -57,7 +57,7 @@ session_start();
                 <!--
 
 
-hfruifuriefru
+
 
 
 
@@ -83,11 +83,22 @@ hfruifuriefru
         
                 -->
 
+        <h2>Nos tarifs:</h2>
 
+        <table>
+            <th>Tarifs</th><th>1 Cours</th><th>2 Cours</th><th>3 Cours</th><th>4 Cours</th>
+            <tr><td></td></tr>
+        </table>
 
+        <!--
         <div class="col-md-4 bg-light p-3">c1</div>
         <div class="col-md-4 bg-secondary text-white p-3">c2</div>
         <div class="col-md-4 bg-dark text-white p-3">c3</div>
+    -->
+
+
+
+        
     </div>
 </div>
 
