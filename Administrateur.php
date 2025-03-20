@@ -33,24 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (isset($_POST['add_course'])) {
-        try {
-            $jour = $_POST['jour'];
-            $heure = $_POST['heure'];
-            $nature = $_POST['nature'];
-            $places = $_POST['places']; 
-            $professor = $_POST['professor'];
-
-            $coursId = $coursDao->ajouterCours($jour, $heure, $nature, $places, $professor);
-            
-            $message = "Cours ajouté avec succès.";
-            $messageType = 'success';
-        } catch (Exception $e) {
-            $message = "Erreur lors de l'ajout du cours : " . $e->getMessage();
-            $messageType = 'danger';
-        }
-    }
-
     if (isset($_POST['add_member'])) {
         try {
             $nom = $_POST['nom_member'];
@@ -151,42 +133,6 @@ a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier
                         <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prénom" required>
                     </div>
                     <button type="submit" name="generate_code" class="btn btn-primary w-100">Générer Code</button>
-                </form>
-            </div>
-
-            <div class="card p-4 shadow">
-                <h3 class="text-center">Ajouter un Cours</h3>
-                <form method="POST" action="Administrateur.php">
-                    <div class="mb-3">
-                        <label for="jour" class="form-label">Jour</label>
-                        <select class="form-control" id="jour" name="jour" required>
-                            <option value="">Sélectionner un jour</option>
-                            <option value="Lundi">Lundi</option>
-                            <option value="Mardi">Mardi</option>
-                            <option value="Mercredi">Mercredi</option>
-                            <option value="Jeudi">Jeudi</option>
-                            <option value="Vendredi">Vendredi</option>
-                            <option value="Samedi">Samedi</option>
-                            <option value="Dimanche">Dimanche</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="heure" class="form-label">Heure</label>
-                        <input type="time" class="form-control" id="heure" name="heure" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nature" class="form-label">Nature du cours</label>
-                        <input type="text" class="form-control" id="nature" name="nature" placeholder="Ex: Yoga, Pilates, etc." required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="places" class="form-label">Nombre de Places</label>
-                        <input type="number" class="form-control" id="places" name="places" min="1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="professor" class="form-label">Professeur</label>
-                        <input type="text" class="form-control" id="professor" name="professor" required>
-                    </div>
-                    <button type="submit" name="add_course" class="btn btn-primary w-100">Ajouter le Cours</button>
                 </form>
             </div>
 
