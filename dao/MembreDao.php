@@ -4,157 +4,93 @@ require_once __DIR__ . '/BaseDonneeDao.php';
 require_once __DIR__ . '/CoursDao.php';
 
 class MembreDao extends BaseDonneeDao {
-    private $admin_email = "admin@gmail.com";
-    private $admin_password = "admin";
+    // Variables simples pour admin
+    public $admin_email = "admin@gmail.com";
+    public $admin_password = "admin";
 
     public function __construct() {
         parent::__construct('membre');
     }
 
-    /**
-     * Vérifie les identifiants de connexion
-     */
+    // Connexion basique
     public function verifierConnexion($email, $password) {
-        if ($email === $this->admin_email && $password === $this->admin_password) {
+        // Si c'est l'admin
+        if ($email == $this->admin_email && $password == $this->admin_password) {
             return [
                 'role' => 'admin',
                 'email' => $email
             ];
         }
 
-        try {
-            $requete = "SELECT * FROM membre WHERE Mail = :email AND Code = :code";
-            $declaration = $this->pdo->prepare($requete);
-            $declaration->execute([
-                ':email' => $email,
-                ':code' => $password
-            ]);
-            $membre = $declaration->fetch(PDO::FETCH_ASSOC);
+        // Si c'est un membre
+        $sql = "SELECT * FROM membre WHERE Mail = '$email' AND Code = '$password'";
+        $resultat = $this->pdo->query($sql);
+        $membre = $resultat->fetch();
 
-            if ($membre) {
-                return [
-                    'role' => 'membre',
-                    'email' => $membre['Mail'],
-                    'id' => $membre['Identifiant']
-                ];
-            }
-            return null;
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la vérification des identifiants: " . $e->getMessage());
-        }
-    }
-
-    /**
-     * Inscrit un nouveau membre et ses cours
-     */
-    public function inscrireMembreEtCours($nom, $prenom, $email, $coursSelectionnes) {
-        try {
-            $this->pdo->beginTransaction();
-
-            // Vérification si l'email existe déjà
-            if ($this->emailExiste($email)) {
-                throw new Exception("Cette adresse email est déjà utilisée.");
-            }
-
-            
-            $requeteMembre = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :email)";
-            $declarationMembre = $this->pdo->prepare($requeteMembre);
-            $declarationMembre->execute([
-                ':nom' => $nom,
-                ':prenom' => $prenom,
-                ':email' => $email
-            ]);
-            
-            $membreId = $this->pdo->lastInsertId();
-
-            
-            $requeteReservation = "INSERT INTO reservation (IDC, Identifiant) VALUES (:idCours, :idMembre)";
-            $declarationReservation = $this->pdo->prepare($requeteReservation);
-
-            foreach ($coursSelectionnes as $coursId) {
-                $declarationReservation->execute([
-                    ':idCours' => $coursId,
-                    ':idMembre' => $membreId
-                ]);
-            }
-
-            $this->pdo->commit();
+        if ($membre) {
             return [
-                'membre_id' => $membreId,
-                'cours_info' => $this->recupererInfosCours($coursSelectionnes)
+                'role' => 'membre',
+                'email' => $membre['Mail'],
+                'id' => $membre['Identifiant']
             ];
-        } catch (PDOException $e) {
-            $this->pdo->rollBack();
-            throw new Exception("Erreur lors de l'inscription: " . $e->getMessage());
         }
+        return null;
     }
 
-    /**
-     * Vérifie si un email existe déjà
-     */
-    private function emailExiste($email) {
-        $requete = "SELECT COUNT(*) FROM membre WHERE Mail = :email";
-        $declaration = $this->pdo->prepare($requete);
-        $declaration->execute([':email' => $email]);
-        return $declaration->fetchColumn() > 0;
+    // Inscription simple
+    public function inscrireMembreEtCours($nom, $prenom, $email, $cours) {
+        // Vérifier si email existe
+        $sql = "SELECT * FROM membre WHERE Mail = '$email'";
+        $resultat = $this->pdo->query($sql);
+        if ($resultat->fetch()) {
+            throw new Exception("Email déjà utilisé");
+        }
+
+        // Ajouter le membre
+        $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES ('$nom', '$prenom', '$email')";
+        $this->pdo->query($sql);
+        $id_membre = $this->pdo->lastInsertId();
+
+        // Ajouter ses cours
+        foreach ($cours as $cours_id) {
+            $sql = "INSERT INTO reservation (IDC, Identifiant) VALUES ($cours_id, $id_membre)";
+            $this->pdo->query($sql);
+        }
+
+        return $id_membre;
     }
 
-    
-
-    
-
-    /**
-     * Génère un code pour un membre existant
-     */
+    // Générer un code simple
     public function genererCode($nom, $prenom) {
-        try {
-            $sql = "SELECT * FROM membre WHERE Nom = :nom AND Prenom = :prenom";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([':nom' => $nom, ':prenom' => $prenom]);
-            $membre = $stmt->fetch();
+        $sql = "SELECT * FROM membre WHERE Nom = '$nom' AND Prenom = '$prenom'";
+        $resultat = $this->pdo->query($sql);
+        $membre = $resultat->fetch();
 
-            if (!$membre) {
-                throw new Exception("Membre introuvable.");
-            }
-
-            $code = substr(bin2hex(random_bytes(4)), 0, 8);
-            
-            $updateSql = "UPDATE membre SET Code = :code WHERE Identifiant = :id";
-            $updateStmt = $this->pdo->prepare($updateSql);
-            $updateStmt->execute([
-                ':code' => $code,
-                ':id' => $membre['Identifiant']
-            ]);
-
-            return $code;
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de la génération du code: " . $e->getMessage());
+        if (!$membre) {
+            throw new Exception("Membre non trouvé");
         }
+
+        // Code aléatoire simple
+        $code = rand(10000000, 99999999);
+        
+        $sql = "UPDATE membre SET Code = '$code' WHERE Identifiant = " . $membre['Identifiant'];
+        $this->pdo->query($sql);
+
+        return $code;
     }
 
-    /**
-     * Ajoute un nouveau membre
-     */
+    // Ajout membre simple
     public function ajouterMembre($nom, $prenom, $email) {
-        try {
-            // Vérification si l'email existe déjà
-            if ($this->emailExiste($email)) {
-                throw new Exception("Cette adresse email est déjà utilisée.");
-            }
-
-            $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES (:nom, :prenom, :mail)";
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute([
-                ':nom' => $nom,
-                ':prenom' => $prenom,
-                ':mail' => $email
-            ]);
-
-            return $this->pdo->lastInsertId();
-        } catch (PDOException $e) {
-            throw new Exception("Erreur lors de l'ajout du membre: " . $e->getMessage());
+        // Vérifier si email existe
+        $sql = "SELECT * FROM membre WHERE Mail = '$email'";
+        $resultat = $this->pdo->query($sql);
+        if ($resultat->fetch()) {
+            throw new Exception("Email déjà utilisé");
         }
-    }
 
-    
+        // Ajouter le membre
+        $sql = "INSERT INTO membre (Nom, Prenom, Mail) VALUES ('$nom', '$prenom', '$email')";
+        $this->pdo->query($sql);
+        return $this->pdo->lastInsertId();
+    }
 }
