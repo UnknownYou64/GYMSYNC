@@ -93,4 +93,11 @@ class MembreDao extends BaseDonneeDao {
         $this->pdo->query($sql);
         return $this->pdo->lastInsertId();
     }
+
+    // Récupérer les informations d'un membre
+    public function getMembre($id) {
+        $sql = "SELECT * FROM membre WHERE Identifiant = $id";
+        $resultat = $this->pdo->query($sql);
+        return $resultat->fetch(PDO::FETCH_ASSOC);
+    }
 }

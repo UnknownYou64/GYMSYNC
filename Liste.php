@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['role'])) {
     header('Location: login.php');
     exit;
@@ -8,12 +9,20 @@ if (!isset($_SESSION['role'])) {
 
 require_once __DIR__ . '/dao/CoursDao.php';
 
+// Créer l'objet coursDao
+$coursDao = new CoursDao();
+$cours = [];
+$erreur = null;
+
+// Récupérer la liste des cours
 try {
-    $coursDao = new CoursDao();
     $cours = $coursDao->recupererTousLesCours();
 } catch (Exception $e) {
     $erreur = $e->getMessage();
 }
+
+// Liste des jours de la semaine
+$jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 ?>
 
 <!DOCTYPE html>
@@ -53,49 +62,62 @@ try {
 
     <div class="container my-4">
         <?php if (isset($erreur)): ?>
-            <div class="alert alert-danger" role="alert">
-                <?= htmlspecialchars($erreur) ?>
-            </div>
+            <div class="alert alert-danger"><?= $erreur ?></div>
         <?php else: ?>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Jour</th>
-                            <th>Heure</th>
-                            <th>Nature du cours</th>
-                            <th>Places totales</th>
-                            <th>Places restantes</th>
-                            <th>Professeur</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($cours)): ?>
-                            <?php foreach ($cours as $coursItem): ?>
-                                <tr>
-                                    <td><?= $coursItem['Jour'] ?></td>
-                                    <td><?= date('H:i', strtotime($coursItem['Heure'])) ?></td>
-                                    <td><?= $coursItem['Nature'] ?></td>
-                                    <td><?= $coursItem['Place'] ?></td>
-                                    <td>
-                                        <?php if ($coursDao->estComplet($coursItem['IDC'])): ?>
-                                            <span class="badge bg-danger">Complet</span>
-                                        <?php else: ?>
-                                            <span class="badge bg-success">
-                                                <?= $coursItem['places_restantes'] ?> places
-                                            </span>
-                                        <?php endif; ?>
-                                    </td>
-                                    <td><?= $coursItem['Professeur'] ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center">Aucun cours disponible.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
+            <div class="row">
+                <?php 
+                // Pour chaque jour, récupérer ses cours
+                foreach ($jours as $jour):
+                    $coursDuJour = [];
+                    // Parcourir tous les cours pour trouver ceux du jour
+                    foreach ($cours as $c) {
+                        if ($c['Jour'] === $jour) {
+                            $coursDuJour[] = $c;
+                        }
+                    }
+                    
+                    // Si il y a des cours ce jour
+                    if (!empty($coursDuJour)):
+                ?>
+                    <div class="col-12">
+                        <h3 class="mt-4"><?= $jour ?></h3>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-fixed">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th style="width: 15%">Heure</th>
+                                        <th style="width: 25%">Cours</th>
+                                        <th style="width: 15%">Places totales</th>
+                                        <th style="width: 25%">Statut</th>
+                                        <th style="width: 20%">Professeur</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($coursDuJour as $c): ?>
+                                        <tr class="<?= $c['places_restantes'] <= 0 ? 'table-secondary' : '' ?>">
+                                            <td style="width: 15%"><?= date('H:i', strtotime($c['Heure'])) ?></td>
+                                            <td style="width: 25%"><?= $c['Nature'] ?></td>
+                                            <td style="width: 15%"><?= $c['Place'] ?></td>
+                                            <td style="width: 25%">
+                                                <?php if ($c['places_restantes'] <= 0): ?>
+                                                    <span class="badge bg-danger">Complet</span>
+                                                <?php else: ?>
+                                                    <span class="badge bg-success">
+                                                        <?= $c['places_restantes'] ?> places disponibles
+                                                    </span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td style="width: 20%"><?= $c['Professeur'] ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php 
+                    endif;
+                endforeach;
+                ?>
             </div>
         <?php endif; ?>
     </div>

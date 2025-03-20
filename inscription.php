@@ -42,6 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Inscrire aux cours sélectionnés
             $coursDao->inscrireAuxCours($membre_id, $cours_selectionnes);
+
+            // Récupérer les informations du membre
+            $membre = $membreDao->getMembre($membre_id);
+            $email = $membre['Mail'];
+            $nom = $membre['Nom'];
+            $prenom = $membre['Prenom'];
             
             // Récupérer les informations des cours pour l'email
             $cours_info = $coursDao->getCoursInfo($cours_selectionnes);
