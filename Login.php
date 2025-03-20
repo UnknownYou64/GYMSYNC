@@ -1,4 +1,8 @@
 <?php
+//mdp : admin
+//email : admin@gmail.com
+
+
 session_start();
 require_once __DIR__ . '/dao/MembreDao.php';
 
