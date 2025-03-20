@@ -213,21 +213,19 @@ a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier
 </div>
 
 <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">historique</h3>
+    <div class="col-md-6">
+        <div class="card p-4 shadow mb-4">
+            <h3 class="text-center">historique</h3>
+        </div>
+    </div>
+</div>
 
-            </div>
-        </div>
-</div>   
-      
 <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Problème</h3>
-                
-            </div>
+    <div class="col-md-6">
+        <div class="card p-4 shadow mb-4">
+            <h3 class="text-center">Problème</h3>
         </div>
+    </div>
 </div>
 
 <footer class="bg-dark text-white text-center py-3">
