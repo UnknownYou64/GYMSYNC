@@ -107,6 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <header class="bg-dark text-white text-center py-3">
     <h1>Espace Administrateur</h1>
 </header>
+
+
+
+
 <!-- 
 
 Dans la page administrateur je veux mettre des instructions a suivre pour chaque fonctionnalité 
@@ -204,6 +208,22 @@ a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier
                     <button type="submit" name="add_member" class="btn btn-primary w-100">Ajouter le Membre</button>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 shadow mb-4">
+            <h3 class="text-center">historique</h3>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 shadow mb-4">
+            <h3 class="text-center">Problème</h3>
         </div>
     </div>
 </div>
