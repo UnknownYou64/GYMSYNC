@@ -79,4 +79,28 @@ abstract class BaseDonneeDao {
         $declaration->execute([':email' => $email]);
         return $declaration->fetchColumn() > 0;
     }
+
+    private function getAllTarif(): array {
+        try {
+            $tousLesTarifs = array();
+            $req = "SELECT * FROM tarifs";
+            $res = $this->pdo->query($req);
+            $lesTuples = $res->fetchAll();
+    
+            foreach ($lesTuples as $leTuple) {
+                $unTarif = array(
+                    'IDT'       => $leTuple['IDT'],
+                    'nbcours'   => $leTuple['nbcours'],
+                    'categorie' => $leTuple['categorie'],
+                    'prix'      => $leTuple['prix']
+                );
+                $tousLesTarifs[] = $unTarif;
+            }
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des tarifs : " . $e->getMessage());
+        }
+    
+        return $tousLesTarifs;
+    }
+    
 }
