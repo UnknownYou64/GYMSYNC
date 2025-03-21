@@ -104,4 +104,12 @@ class CoursDao extends BaseDonneeDao {
         $resultat = $this->pdo->query($sql);
         return $resultat->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function supprimerMemberDuCours($membre_id, $cours_id) {
+        $sql = "DELETE FROM reservation 
+                WHERE Identifiant = $membre_id 
+                AND IDC = $cours_id";
+        
+        return $this->pdo->query($sql);
+    }
 }
