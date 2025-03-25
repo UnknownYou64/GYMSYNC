@@ -65,4 +65,51 @@ class CoursDao extends BaseDonneeDao {
         $this->pdo->query($sql);
         return true;
     }
+
+    // Inscrire un membre à plusieurs cours
+    public function inscrireAuxCours($membre_id, $cours_selectionnes) {
+        // Vérifier pour chaque cours s'il est complet
+        foreach ($cours_selectionnes as $cours_id) {
+            if ($this->estComplet($cours_id)) {
+                throw new Exception("Le cours " . $cours_id . " est complet");
+            }
+        }
+
+        // Inscrire aux cours si aucun n'est complet
+        foreach ($cours_selectionnes as $cours_id) {
+            $sql = "INSERT INTO reservation (IDC, Identifiant) 
+                   VALUES ($cours_id, $membre_id)";
+            $this->pdo->query($sql);
+        }
+
+        return true;
+    }
+
+    // Récupérer les informations des cours sélectionnés
+    public function getCoursInfo($cours_ids) {
+        $cours_ids_str = implode(',', $cours_ids);
+        $sql = "SELECT * FROM cours WHERE IDC IN ($cours_ids_str)";
+        $resultat = $this->pdo->query($sql);
+        return $resultat->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Ajouter cette nouvelle méthode dans CoursDao
+    public function recupererTousLesCours() {
+        $sql = "SELECT c.*, 
+                (c.Place - (SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC)) as places_restantes 
+                FROM cours c 
+                ORDER BY FIELD(Jour, 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'), 
+                c.Heure";
+
+        $resultat = $this->pdo->query($sql);
+        return $resultat->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function supprimerMemberDuCours($membre_id, $cours_id) {
+        $sql = "DELETE FROM reservation 
+                WHERE Identifiant = $membre_id 
+                AND IDC = $cours_id";
+        
+        return $this->pdo->query($sql);
+    }
 }

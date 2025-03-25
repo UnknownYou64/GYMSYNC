@@ -33,24 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    if (isset($_POST['add_course'])) {
-        try {
-            $jour = $_POST['jour'];
-            $heure = $_POST['heure'];
-            $nature = $_POST['nature'];
-            $places = $_POST['places']; 
-            $professor = $_POST['professor'];
-
-            $coursId = $coursDao->ajouterCours($jour, $heure, $nature, $places, $professor);
-            
-            $message = "Cours ajouté avec succès.";
-            $messageType = 'success';
-        } catch (Exception $e) {
-            $message = "Erreur lors de l'ajout du cours : " . $e->getMessage();
-            $messageType = 'danger';
-        }
-    }
-
     if (isset($_POST['add_member'])) {
         try {
             $nom = $_POST['nom_member'];
@@ -60,6 +42,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $membreId = $membreDao->ajouterMembre($nom, $prenom, $mail);
             
             $message = "Membre ajouté avec succès.";
+            $messageType = 'success';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
+
+    if (isset($_POST['remove_member_course'])) {
+        try {
+            $membre_id = $_POST['membre_id'];
+            $cours_id = $_POST['cours_id'];
+            
+            $coursDao->supprimerMemberDuCours($membre_id, $cours_id);
+            
+            $message = "Membre retiré du cours avec succès.";
             $messageType = 'success';
         } catch (Exception $e) {
             $message = $e->getMessage();
@@ -108,28 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Espace Administrateur</h1>
 </header>
 
-
-
-
-<!-- 
-
-Dans la page administrateur je veux mettre des instructions a suivre pour chaque fonctionnalité 
-je veux les mettre a droite et a gauche de la page 
-dire ce que sa modifie et ce que sa ajoute 
-
-
-
-et en bas de page afficher un historique des actions effectuées par l'administrateur (petits historique sans boutons revennir a l'etat precedent)
-
-
-a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier technique ou envoyer un sms/whatsapp a un numero de telephone (0786448613)
-
-
-
-
--->
-
 <div class="container my-4">
+    <!-- Affichage des messages d'alerte -->
     <?php if ($message): ?>
         <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
             <?php echo $message; ?>
@@ -137,61 +114,30 @@ a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier
         </div>
     <?php endif; ?>
 
+    <!-- Partie principale avec les fonctionnalités -->
     <div class="row justify-content-center">
+
+        <!-- Formulaires au centre -->
         <div class="col-md-6">
+            <!-- Générateur de code -->
             <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Code Generateur</h3>
+                <h3 class="text-center">Générateur de Code</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
-                        <label for="nom" class="form-label">Nom</label>
-                        <input type="text" class="form-control" id="nom" name="nom" placeholder="Nom" required>
+                        <label for="nom" class="form-label">Nom du membre</label>
+                        <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrez le nom" required>
                     </div>
                     <div class="mb-3">
-                        <label for="prenom" class="form-label">Prénom</label>
-                        <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Prénom" required>
+                        <label for="prenom" class="form-label">Prénom du membre</label>
+                        <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Entrez le prénom" required>
                     </div>
-                    <button type="submit" name="generate_code" class="btn btn-primary w-100">Générer Code</button>
+                    <button type="submit" name="generate_code" class="btn btn-primary w-100">Créer un code d'accès</button>
                 </form>
             </div>
 
-            <div class="card p-4 shadow">
-                <h3 class="text-center">Ajouter un Cours</h3>
-                <form method="POST" action="Administrateur.php">
-                    <div class="mb-3">
-                        <label for="jour" class="form-label">Jour</label>
-                        <select class="form-control" id="jour" name="jour" required>
-                            <option value="">Sélectionner un jour</option>
-                            <option value="Lundi">Lundi</option>
-                            <option value="Mardi">Mardi</option>
-                            <option value="Mercredi">Mercredi</option>
-                            <option value="Jeudi">Jeudi</option>
-                            <option value="Vendredi">Vendredi</option>
-                            <option value="Samedi">Samedi</option>
-                            <option value="Dimanche">Dimanche</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="heure" class="form-label">Heure</label>
-                        <input type="time" class="form-control" id="heure" name="heure" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nature" class="form-label">Nature du cours</label>
-                        <input type="text" class="form-control" id="nature" name="nature" placeholder="Ex: Yoga, Pilates, etc." required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="places" class="form-label">Nombre de Places</label>
-                        <input type="number" class="form-control" id="places" name="places" min="1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="professor" class="form-label">Professeur</label>
-                        <input type="text" class="form-control" id="professor" name="professor" required>
-                    </div>
-                    <button type="submit" name="add_course" class="btn btn-primary w-100">Ajouter le Cours</button>
-                </form>
-            </div>
-
-            <div class="card p-4 shadow mt-4">
-                <h3 class="text-center">Ajouter un Membre</h3>
+            <!-- Ajout de membre -->
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Ajouter un Nouveau Membre</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
                         <label for="nom_member" class="form-label">Nom</label>
@@ -202,31 +148,94 @@ a la fin il faut aussi un espace pour en cas de probleme, envoyer vers le cahier
                         <input type="text" class="form-control" id="prenom_member" name="prenom_member" required>
                     </div>
                     <div class="mb-3">
-                        <label for="mail_member" class="form-label">Email</label>
+                        <label for="mail_member" class="form-label">Adresse mail</label>
                         <input type="email" class="form-control" id="mail_member" name="mail_member" required>
                     </div>
-                    <button type="submit" name="add_member" class="btn btn-primary w-100">Ajouter le Membre</button>
+                    <button type="submit" name="add_member" class="btn btn-success w-100">Inscrire le membre</button>
                 </form>
+            </div>
+
+            <!-- Gestion des cours -->
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Gestion des Cours</h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="mb-3">
+                        <label class="form-label">Sélection du cours</label>
+                        <select name="cours_id" id="cours_select" class="form-control" required>
+                            <option value="">Choisissez un cours</option>
+                            <?php 
+                            $cours = $coursDao->recupererTousLesCours();
+                            foreach ($cours as $c) {
+                                echo "<option value='" . $c['IDC'] . "'>" 
+                                    . $c['Jour'] . " à " 
+                                    . date('H:i', strtotime($c['Heure'])) . " - " 
+                                    . $c['Nature'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sélection du membre</label>
+                        <select name="membre_id" id="membre_select" class="form-control" required disabled>
+                            <option value="">Sélectionnez d'abord un cours</option>
+                        </select>
+                    </div>
+                    <button type="submit" name="remove_member_course" class="btn btn-danger w-100">
+                        Désinscrire du cours
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- Historique des actions -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-8">
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Historique</h3>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone de support -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Besoin d'aide ?</h3>
+                <div class="d-flex justify-content-center gap-3">
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card p-4 shadow mb-4">
-            <h3 class="text-center">historique</h3>
-        </div>
-    </div>
-</div>
-
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card p-4 shadow mb-4">
-            <h3 class="text-center">Problème</h3>
-        </div>
-    </div>
-</div>
+<script>
+document.getElementById('cours_select').addEventListener('change', function() {
+    const cours_id = this.value;
+    const membre_select = document.getElementById('membre_select');
+    
+    if (cours_id) {
+        // Faire une requête AJAX pour obtenir les membres du cours
+        fetch(`get_membres_cours.php?cours_id=${cours_id}`)
+            .then(response => response.json())
+            .then(membres => {
+                membre_select.innerHTML = '<option value="">Choisir un membre</option>';
+                membres.forEach(membre => {
+                    membre_select.innerHTML += `<option value="${membre.Identifiant}">
+                        ${membre.Nom} ${membre.Prenom}
+                    </option>`;
+                });
+                membre_select.disabled = false;
+            });
+    } else {
+        membre_select.innerHTML = '<option value="">Choisir d\'abord un cours</option>';
+        membre_select.disabled = true;
+    }
+});
+</script>
 
 <footer class="bg-dark text-white text-center py-3">
     <p>&copy; 2025 GYMSYNC</p>

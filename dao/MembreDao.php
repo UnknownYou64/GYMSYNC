@@ -93,4 +93,45 @@ class MembreDao extends BaseDonneeDao {
         $this->pdo->query($sql);
         return $this->pdo->lastInsertId();
     }
+
+    // Récupérer les informations d'un membre en utilisant une requête préparée
+    public function getMembre($id) {
+        // Utilisation d'une requête préparée pour éviter les injections SQL
+        $sql = "SELECT * FROM membre WHERE Identifiant = :id";
+        $stmt = $this->pdo->prepare($sql);
+        
+        // On associe le paramètre avec une valeur
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        
+        // On exécute la requête
+        $stmt->execute();
+        
+        // On retourne le résultat
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Récupérer tous les membres triés par nom et prénom
+    public function getMembres() {
+        // Requête simple car pas de paramètres externes
+        $sql = "SELECT * FROM membre ORDER BY Nom, Prenom";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Récupérer tous les membres inscrits à un cours spécifique
+    public function getMembresParCours($cours_id) {
+        // Requête préparée pour la jointure
+        $sql = "SELECT m.* 
+                FROM membre m 
+                JOIN reservation r ON m.Identifiant = r.Identifiant 
+                WHERE r.IDC = :cours_id 
+                ORDER BY m.Nom, m.Prenom";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':cours_id', $cours_id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
