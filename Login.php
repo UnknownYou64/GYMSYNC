@@ -26,9 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
             if ($resultat['role'] === 'admin') {
-                header('Location: Administrateur.php');
+                header('Location: /Administrateur.php');
             } else {
-                header('Location: index.php');
+                header('Location: /index.php');
             }
             exit;
         } else {

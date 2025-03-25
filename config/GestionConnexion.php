@@ -34,3 +34,9 @@ class Connexiondb {
         return $this->connection;
     }
 }
+
+
+//envoyer au serveur
+
+// scp inscription.php root@10.3.16.11:/var/www/.
+//remplacer inscription.php par le nom du fichier que vous voulez envoyer
