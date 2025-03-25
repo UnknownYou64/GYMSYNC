@@ -40,7 +40,7 @@ session_start();
                     <a href="logout.php" class="btn btn-danger">Déconnexion</a>
                 <?php } else { ?>
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="./../Login.php">Se connecter</a>
+                        <a class="nav-link" href="/Login.php">Se connecter</a>
                     </li>
                 <?php } ?>
             </ul>
