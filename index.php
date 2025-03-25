@@ -1,4 +1,4 @@
-<?php
+<div?php
 session_start();
 ?>
 
@@ -21,7 +21,7 @@ session_start();
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item me-3">
-                    <a class="nav-link active" href="index.php">Accueil</a>
+                    <a class="nav-link active" href="accueil.php">Accueil</a>
                 </li>
                 <li class="nav-item me-3">
                     <a class="nav-link" href="inscription.php">Inscription</a>
@@ -76,21 +76,9 @@ session_start();
                 
         Soit vous garder le code ci dessous soit vous le supprimer et vous le refaite a votre maniere
 
-
-
-
-
         
-                -->
 
-        <h2>Nos tarifs:</h2>
-
-        <table>
-            <th>Tarifs</th><th>1 Cours</th><th>2 Cours</th><th>3 Cours</th><th>4 Cours</th>
-            <tr><td></td></tr>
-        </table>
-
-        <!--
+    
         <div class="col-md-4 bg-light p-3">c1</div>
         <div class="col-md-4 bg-secondary text-white p-3">c2</div>
         <div class="col-md-4 bg-dark text-white p-3">c3</div>

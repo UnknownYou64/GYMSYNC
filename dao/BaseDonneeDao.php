@@ -80,7 +80,7 @@ abstract class BaseDonneeDao {
         return $declaration->fetchColumn() > 0;
     }
 
-    private function getAllTarif(): array {
+    public function getAllTarif(): array {
         try {
             $tousLesTarifs = array();
             $req = "SELECT * FROM tarifs";
