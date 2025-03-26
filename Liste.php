@@ -54,27 +54,9 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">GYMSYNC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="inscription.php">Inscription</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="Liste.php">Liste des Cours</a></li>
-                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
-                        <li class="nav-item me-3"><a href="Administrateur.php" class="nav-link">Admin</a></li>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['role'])) { ?>
-                        <a href="logout.php" class="btn btn-danger">Déconnexion</a>
-                    <?php } ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<?php
+    include 'NavBar.php';
+?>
 
     <header class="bg-dark text-white text-center py-3">
         <h1>Liste des Cours Disponibles</h1>

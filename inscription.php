@@ -6,10 +6,12 @@ if (!isset($_SESSION['role'])) {
     exit;
 }
 
+require_once __DIR__ . '/dao/TarifDao.php';
 require_once __DIR__ . '/dao/MembreDao.php';
 require_once __DIR__ . '/dao/CoursDao.php';
 
 // Initialisation des DAO
+$tarifDao = new TarifDao();
 $membreDao = new MembreDao();
 $coursDao = new CoursDao();
 
@@ -23,41 +25,49 @@ try {
 $message = '';
 $messageType = '';
 
-// Remplacer la partie du code qui récupère l'ID du membre
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $cours_selectionnes = isset($_POST['cours']) ? $_POST['cours'] : [];
+    $type_adherent = isset($_POST['type_adherent']) ? $_POST['type_adherent'] : '';
 
     if (!empty($cours_selectionnes)) {
         try {
-            // Récupération de l'ID du membre depuis la session
+
+
+            //recuperer id du membre connecter
             if (!isset($_SESSION['id'])) {
                 throw new Exception("Vous devez être connecté pour vous inscrire aux cours.");
             }
             $membre_id = $_SESSION['id'];
-            
-            // Vérifier le nombre de cours sélectionnés
-            if (count($cours_selectionnes) > 4) {
+
+
+            // Inscription aux cours
+
+            $nombre_cours = count($cours_selectionnes);
+            if ($nombre_cours > 4) {
                 throw new Exception("Vous ne pouvez sélectionner que 4 cours maximum.");
             }
-
-            // Inscrire aux cours sélectionnés
+            $tarif = $tarifDao->getTarif($type_adherent, $nombre_cours);
+            if (!$tarif) {
+                throw new Exception("Aucun tarif trouvé pour votre sélection.");
+            }
+            $membreDao->majTarif($membre_id, $tarif['IDT']);
             $coursDao->inscrireAuxCours($membre_id, $cours_selectionnes);
-
-            // Récupérer les informations du membre
             $membre = $membreDao->getMembre($membre_id);
             $email = $membre['Mail'];
             $nom = $membre['Nom'];
             $prenom = $membre['Prenom'];
-            
-            // Récupérer les informations des cours pour l'email
             $cours_info = $coursDao->getCoursInfo($cours_selectionnes);
             
-            require_once 'mail.php';
 
-            $message = "Inscription aux cours réussie ! Un e-mail de confirmation vous a été envoyé.";
+
+
+            // Envoi de mail et afficher message alerte
+
+            require_once 'mail.php';
+            $message = "Inscription réussie ! Tarif applicable : " . $tarif['prix'] . "€";
             $messageType = 'success';
         } catch (Exception $e) {
-            $message = "Erreur lors de l'inscription aux cours : " . $e->getMessage();
+            $message = $e->getMessage();
             $messageType = 'danger';
         }
     } else {
@@ -77,29 +87,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">GYMSYNC</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item me-3"><a class="nav-link" href="index.php">Accueil</a></li>
-                <li class="nav-item me-3"><a class="nav-link active" href="inscription.php">Inscription</a></li>
-                <li class="nav-item me-3"><a class="nav-link" href="Liste.php">Liste des Cours</a></li>
-                <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
-                    <li class="nav-item me-3">
-                        <a href="Administrateur.php" class="nav-link">Admin</a>
-                    </li>
-                <?php } ?>
-                <?php if (isset($_SESSION['role'])) { ?>
-                    <li class="nav-item"><a href="logout.php" class="btn btn-danger">Déconnexion</a></li>
-                <?php } ?>
-            </ul>
-        </div>
-    </div>
-</nav>
+<?php
+    include 'NavBar.php';
+?>
 
     <header class="bg-dark text-white text-center py-3">
         <h1>Formulaire d'inscription</h1>
@@ -118,6 +108,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="card p-4 shadow">
                     <h3 class="text-center">Sélection des cours</h3>
                     <form method="POST" action="inscription.php">
+                        <div class="mb-3">
+                            <label class="form-label">Type d'adhérent</label>
+                            <select name="type_adherent" class="form-control" required>
+                                <option value="">Choisissez votre catégorie</option>
+                                <option value="adulte">Adulte</option>
+                                <option value="couple">Couple</option>
+                                <option value="etudiant">Étudiant</option>
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Sélectionner les cours (1 à 4)</label>
                             <?php if (!empty($coursDisponibles)) { ?>

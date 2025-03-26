@@ -4,13 +4,13 @@ require_once __DIR__ . '/BaseDonneeDao.php';
 require_once __DIR__ . '/CoursDao.php';
 
 class MembreDao extends BaseDonneeDao {
-    // Variables simples pour admin
-    public $admin_email = "admin@gmail.com";
-    public $admin_password = "admin";
-
     public function __construct() {
         parent::__construct('membre');
     }
+
+    // Variables simples pour admin
+    public $admin_email = "admin@gmail.com";
+    public $admin_password = "admin";
 
     // Connexion basique
     public function verifierConnexion($email, $password) {
@@ -133,5 +133,16 @@ class MembreDao extends BaseDonneeDao {
         $stmt->execute();
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function majTarif($membre_id, $tarif_id) {
+        $sql = "UPDATE membre 
+                SET tarif_id = :tarif_id 
+                WHERE Identifiant = :membre_id";
+                
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':tarif_id', $tarif_id, PDO::PARAM_INT);
+        $stmt->bindParam(':membre_id', $membre_id, PDO::PARAM_INT);
+        return $stmt->execute();
     }
 }
