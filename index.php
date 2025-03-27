@@ -55,8 +55,13 @@ session_start();
     </div>
         
         <h2 class="col-md-4 bg-secondary text-white p-3">Actualités:</h2>
+        
+        <h3>Pas de cours pendant les vacances de Noël</h3>
+        <h3>Arrêt des cours le vendredi 20 décembre 2024</h3>
+        <h3>Reprise des cours le lundi 6 janvier 2025</h3>
+        <h3>Les membres du bureau vous souhaitent à toutes et à tous de très belles fêtes de fin d'année.</h3>
+        <h3>Refonte du site web</h3>
         <br>
-
         
         <h2 class="col-md-4 bg-secondary text-white p-3">Nos tarifs:</h2> 
         <br>
@@ -111,8 +116,6 @@ session_start();
         
         
         <br>
-
-        
         <h2 class="col-md-4 bg-secondary text-white p-3">Nous situer:</h2>
         <br>
 
