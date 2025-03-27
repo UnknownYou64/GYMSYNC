@@ -59,7 +59,10 @@ CREATE TABLE `membre` (
   `Nom` varchar(255) NOT NULL,
   `Prenom` varchar(255) NOT NULL,
   `Mail` varchar(255) NOT NULL,
-  `Code` varchar(255) DEFAULT NULL
+  `Code` varchar(255) DEFAULT NULL,
+  `statut_paiement` BOOLEAN NOT NULL DEFAULT 0,
+  `date_inscription` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tarif_id` INT(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -149,7 +152,25 @@ INSERT INTO `tarifs` (`IDT`, `nbcours`, `categorie`, `prix`) VALUES
 (11, 3, 'Etudiant', 130),
 (12, 4, 'Etudiant', 140);
 
+-- --------------------------------------------------------
+
 --
+-- Modification de la table membre pour ajouter le suivi des paiements
+--
+ALTER TABLE `membre` 
+ADD `statut_paiement` BOOLEAN NOT NULL DEFAULT 0,
+ADD `date_inscription` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ADD `tarif_id` INT(11),
+ADD FOREIGN KEY (`tarif_id`) REFERENCES `tarifs`(`IDT`);
+
+-- Ajout d'index pour optimiser les recherches
+ALTER TABLE `membre`
+ADD INDEX `idx_statut_paiement` (`statut_paiement`),
+ADD INDEX `idx_date_inscription` (`date_inscription`);
+
+-- Mise à jour des données existantes
+UPDATE `membre` SET `statut_paiement` = 0, `date_inscription` = NOW();
+
 -- Index pour les tables exportées
 --
 

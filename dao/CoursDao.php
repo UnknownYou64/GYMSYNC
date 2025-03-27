@@ -112,4 +112,18 @@ class CoursDao extends BaseDonneeDao {
         
         return $this->pdo->query($sql);
     }
+
+    public function supprimerToutesReservations($cours_id) {
+        $sql = "DELETE FROM reservation WHERE IDC = :cours_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':cours_id', $cours_id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function supprimerCours($cours_id) {
+        $sql = "DELETE FROM cours WHERE IDC = :cours_id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':cours_id', $cours_id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 }

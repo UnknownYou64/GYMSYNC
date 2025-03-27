@@ -2,6 +2,8 @@
 //mdp : admin
 //email : admin@gmail.com
 
+//
+
 
 
 session_start();
@@ -36,8 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $messageType = 'danger';
         }
     } catch (Exception $e) {
-        $message = "Une erreur est survenue lors de la connexion.";
+        $message = "Une erreur est survenue lors de la connexion: " . $e->getMessage();
         $messageType = 'danger';
+        // Pour le débogage, vous pouvez aussi logger l'erreur
+        error_log($e->getMessage());
     }
 }
 ?>
