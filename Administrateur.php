@@ -10,11 +10,11 @@ require_once 'Connexion.php';
 require_once 'dao/BaseDonneeDao.php';
 require_once 'dao/CoursDao.php';
 require_once 'dao/MembreDao.php';
-
+require_once 'dao/historiqueDao.php';
 // Initialisation des DAO
 $coursDao = new CoursDao();
 $membreDao = new MembreDao();
-$historiqueDao = new historiqueDao();
+$historiqueDao = new HistoriqueDao();
 $message = '';
 $messageType = '';
 
