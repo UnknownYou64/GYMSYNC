@@ -9,6 +9,10 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page Accueil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+    window.location.href = "accueil.php";
+</script>
+
 </head>
 <body>
 <!-- Navbar -->
@@ -83,7 +87,50 @@ session_start();
         <div class="col-md-4 bg-secondary text-white p-3">c2</div>
         <div class="col-md-4 bg-dark text-white p-3">c3</div>
     -->
+    <h2 class="col-md-4 bg-secondary text-white p-3">Actualités:</h2>
+        <br>
 
+        
+        <h2 class="col-md-4 bg-secondary text-white p-3">Nos tarifs:</h2> 
+        <br>
+
+        <!--<div class="row">
+        <table style="font-size:130%">
+            <th>Tarifs</th><th>1 Cours</th><th>2 Cours</th><th>3 Cours</th><th>4 Cours</th>
+            <tr><td>Adulte</td><td>136€ </td><td>166€ </td><td>186€ </td><td>206€ </td></tr>
+      <tr><td>Couple</td><td>260€ </td><td>308€ </td><td>340€ </td><td>355€ </td>
+      <tr><td>Etudiant</td><td>90€ </td><td>110€ </td><td>130€ </td><td>140€ </td>
+        </table>
+        </div>-->
+        
+        <?php
+
+        
+
+        ?>
+
+
+        <div class="row">
+        <table style="font-size:130%">
+            <th>Tarifs</th><th>1 Cours</th><th>2 Cours</th><th>3 Cours</th><th>4 Cours</th>
+            
+        </table>
+        </div> 
+        
+        <br>
+        
+        <h2 class="col-md-4 bg-secondary text-white p-3">Nous situer:</h2>
+        <br>
+
+        <h5>Espace Daniel Balavoine Avenue de l'Europe 64320 Bizanos</h5>
+        <div>
+				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2904.185641370534!2d-0.35410538471574815!3d43.28943387913549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd56491e11e42a2b%3A0xc1c69fea539e3f82!2sEspace+Daniel+Balavoine!5e0!3m2!1sfr!2sfr!4v1501675843131" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+<br>
+        <h2 class="col-md-4 bg-secondary text-white p-3">Nous contacter:</h2>
+        <h5> Mail: gymavenirbizanos@free.fr </h5>
+        <br>
+        </div>
 
 
         
