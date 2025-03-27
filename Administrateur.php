@@ -10,21 +10,20 @@ require_once 'Connexion.php';
 require_once 'dao/BaseDonneeDao.php';
 require_once 'dao/CoursDao.php';
 require_once 'dao/MembreDao.php';
-
+require_once 'dao/historiqueDao.php';
 // Initialisation des DAO
 $coursDao = new CoursDao();
 $membreDao = new MembreDao();
-
 $message = '';
 $messageType = '';
-
+$historiqueDao = new historiqueDao();
+$historiques = $historiqueDao->recupererhistorique();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generer_code'])) {
         try {
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $code = $membreDao->genererCode($nom, $prenom);
-            
             $message = "Code généré : $code pour $nom $prenom";
             $messageType = 'success';
         } catch (Exception $e) {
@@ -192,14 +191,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-    <!-- Historique et support -->
     <div class="row justify-content-center mt-4">
-        <div class="col-md-8">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Historique des Actions</h3>
+    <div class="col-md-8">
+        <div class="card p-4 shadow mb-4">
+            <h3 class="text-center">Historique</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Action</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($historiques as $historique): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($historique['Action']) ?></td>
+                                <td><?= htmlspecialchars($historique['DateAction']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 
 
