@@ -14,6 +14,7 @@ require_once 'dao/MembreDao.php';
 // Initialisation des DAO
 $coursDao = new CoursDao();
 $membreDao = new MembreDao();
+$historiqueDao = new historiqueDao();
 $message = '';
 $messageType = '';
 
