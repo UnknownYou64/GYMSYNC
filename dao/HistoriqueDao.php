@@ -7,12 +7,10 @@ class HistoriqueDao extends BaseDonneeDao {
         parent::__construct('cours');
     }
 
-    public function insererhistorique($membre_id, $cours_id, $action){
-        $sql = "INSERT INTO historique (membre_id, cours_id, Action) VALUES (:membre_id, :cours_id, :action)";
+    public function insererhistorique($action){
+        $sql = "INSERT INTO historique (Action) VALUES (:action)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
-            'membre_id' => $membre_id,
-            'cours_id' => $cours_id,
             'action' => $action
         ]);
         return true;
