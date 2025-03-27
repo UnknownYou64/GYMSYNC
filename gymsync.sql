@@ -153,7 +153,6 @@ INSERT INTO `tarifs` (`IDT`, `nbcours`, `categorie`, `prix`) VALUES
 (12, 4, 'Etudiant', 140);
 
 -- --------------------------------------------------------
-
 --
 -- Modification de la table membre pour ajouter le suivi des paiements
 --
@@ -225,3 +224,8 @@ ALTER TABLE `tarifs`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+ALTER TABLE `historique`
+  ADD CONSTRAINT `historique_ibfk_1` FOREIGN KEY (`Identifiant`) REFERENCES `membre` (`Identifiant`),
+  ADD CONSTRAINT `historique_ibfk_2` FOREIGN KEY (`IDC`) REFERENCES `cours` (`IDC`);
+

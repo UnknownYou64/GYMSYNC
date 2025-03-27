@@ -14,9 +14,11 @@ require_once 'dao/MembreDao.php';
 // Initialisation des DAO
 $coursDao = new CoursDao();
 $membreDao = new MembreDao();
-
+$historiqueDao = new historiqueDao();
 $message = '';
 $messageType = '';
+
+$historiques = $historiqueDao->recupererhistorique();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generer_code'])) {
@@ -24,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $code = $membreDao->genererCode($nom, $prenom);
-            
             $message = "Code généré : $code pour $nom $prenom";
             $messageType = 'success';
         } catch (Exception $e) {
@@ -102,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </header>
 
 <div class="container my-4">
-    <!-- Messages d'alerte en français -->
     <?php if ($message): ?>
         <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
             <?php echo $message; ?>
@@ -192,14 +192,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-    <!-- Historique et support -->
     <div class="row justify-content-center mt-4">
-        <div class="col-md-8">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Historique des Actions</h3>
+    <div class="col-md-8">
+        <div class="card p-4 shadow mb-4">
+            <h3 class="text-center">Historique</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Action</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($historiques as $historique): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($historique['Action']) ?></td>
+                                <td><?= htmlspecialchars($historique['DateAction']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 
 
@@ -207,6 +224,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="col-md-8">
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Assistance</h3>
+
+
+                <!-- ajouter un lien vers le document technique que je suis entrain de creer -->
             </div>
         </div>
     </div>
@@ -223,7 +243,6 @@ document.getElementById('cours_select').addEventListener('change', function() {
     const cours_id = this.value;
     const membre_select = document.getElementById('membre_select');
     if (cours_id) {
-        // Faire une requête AJAX pour obtenir les membres du cours
         fetch(`get_membres_cours.php?cours_id=${cours_id}`)
             .then(response => response.json())
             .then(membres => {
