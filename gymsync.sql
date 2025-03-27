@@ -153,16 +153,7 @@ INSERT INTO `tarifs` (`IDT`, `nbcours`, `categorie`, `prix`) VALUES
 (12, 4, 'Etudiant', 140);
 
 -- --------------------------------------------------------
--- Structure de la table `tarifs`
 --
-CREATE TABLE `historique` (
-  `idHistorique` int(11) NOT NULL,
-  `Identifiant` int(11) DEFAULT NULL,
-  `IDC` int(11) DEFAULT NULL,
-  `Action` varchar(255) DEFAULT NULL,
-  `DateAction` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
--- --------------------------------------------------------
 -- Modification de la table membre pour ajouter le suivi des paiements
 --
 ALTER TABLE `membre` 
