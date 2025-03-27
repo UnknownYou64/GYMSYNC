@@ -17,6 +17,8 @@ $membreDao = new MembreDao();
 $message = '';
 $messageType = '';
 
+$historiques = $historiqueDao->recupererhistorique();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generer_code'])) {
         try {
