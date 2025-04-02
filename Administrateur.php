@@ -5,7 +5,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
     header('Location: index.php');
     exit;
 }
-
+require_once 'config/GestionConnexion.php';
 require_once 'Connexion.php';
 require_once 'dao/BaseDonneeDao.php';
 require_once 'dao/CoursDao.php';
