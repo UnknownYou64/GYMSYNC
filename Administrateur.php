@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $code = $membreDao->genererCode($nom, $prenom);
+            $historiques = $historiqueDao->insererhistorique("Génerer un code pour le membre : $nom $prenom");
             $message = "Code généré : $code pour $nom $prenom";
             $messageType = 'success';
         } catch (Exception $e) {
