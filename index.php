@@ -23,9 +23,8 @@ session_start();
     <h1>Accueil</h1>
 </header>
 
-
 <div class="container my-4">
-    <div class="row">
+    <div class="row ">
                 <!--
 
     ici le code pour les informations necessaire a la presentation du site pour la page d'acceuil 
@@ -56,29 +55,18 @@ session_start();
         
         <h2 class="col-md-4 bg-secondary text-white p-3">Actualités:</h2>
         
-        <h3>Pas de cours pendant les vacances de Noël</h3>
-        <h3>Arrêt des cours le vendredi 20 décembre 2024</h3>
-        <h3>Reprise des cours le lundi 6 janvier 2025</h3>
+        <h3>Pas de cours pendant les vacances de Noël.</h3>
+        <h3 style="color: red; font-weight: bold;">Arrêt des cours le vendredi 20 décembre 2024.</h3>
+        <h3 style="color: red; font-weight: bold;">Reprise des cours le lundi 6 janvier 2025.</h3>
         <h3>Les membres du bureau vous souhaitent à toutes et à tous de très belles fêtes de fin d'année.</h3>
-        <h3>Refonte du site web</h3>
+        <h3>Refonte du site web.</h3>
         <br>
         
         <h2 class="col-md-4 bg-secondary text-white p-3">Nos tarifs:</h2> 
         <br>
-
-        
-        <!--<div class="row">
-        <table style="font-size:130%">
-            <th>Tarifs</th><th>1 Cours</th><th>2 Cours</th><th>3 Cours</th><th>4 Cours</th>
-            <tr><td>Adulte</td><td>136€ </td><td>166€ </td><td>186€ </td><td>206€ </td></tr>
-      <tr><td>Couple</td><td>260€ </td><td>308€ </td><td>340€ </td><td>355€ </td>
-      <tr><td>Etudiant</td><td>90€ </td><td>110€ </td><td>130€ </td><td>140€ </td>
-        </table>
-        </div>   --> 
-        
-
+        <div class="container">
         <div class="row">
-        <table style="font-size:130%">
+        <table style="font-size:130%; width: 50%; margin: 0px auto;">
             <th>Tarifs</th><th>1 Cours</th><th>2 Cours</th><th>3 Cours</th><th>4 Cours</th>
             <?php
     require_once __DIR__ . '/dao/BaseDonneeDao.php'; 
@@ -112,14 +100,14 @@ session_start();
     ?>
         </table>
         </div>    
-        
+        </div>
         
         
         <br>
         <h2 class="col-md-4 bg-secondary text-white p-3">Nous situer:</h2>
         <br>
 
-        <h5>Espace Daniel Balavoine Avenue de l'Europe 64320 Bizanos</h5>
+        <h5>Espace Daniel Balavoine<br> Avenue de l'Europe<br> 64320 Bizanos</h5>
         <div>
 				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2904.185641370534!2d-0.35410538471574815!3d43.28943387913549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd56491e11e42a2b%3A0xc1c69fea539e3f82!2sEspace+Daniel+Balavoine!5e0!3m2!1sfr!2sfr!4v1501675843131" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
         </div>
