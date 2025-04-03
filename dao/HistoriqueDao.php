@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/BaseDonneeDao.php';
+require_once 'dao/BaseDonneeDao.php';
 
 class HistoriqueDao extends BaseDonneeDao {
     public function __construct() {
@@ -18,8 +18,9 @@ class HistoriqueDao extends BaseDonneeDao {
 
     // Récupérer l'historique
     public function recupererhistorique(){
-        $sql = "SELECT h.Action, h.DateAction
-                FROM historique h";
+        $sql = "SELECT  Action, DateAction
+                FROM historique 
+                ORDER BY DateAction DESC";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
