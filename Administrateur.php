@@ -6,7 +6,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
     exit;
 }
 require_once 'config/GestionConnexion.php';
-require_once 'Connexion.php';
+
 require_once 'dao/BaseDonneeDao.php';
 require_once 'dao/CoursDao.php';
 require_once 'dao/MembreDao.php';
