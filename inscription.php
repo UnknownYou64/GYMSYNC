@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Envoi de mail et afficher message alerte
 
             require_once 'mail.php';
-            $message = "Inscription réussie ! Tarif applicable : " . $tarif['prix'] . "€";
+            $message = "Inscription réussie ! Le Tarif à payer est de : " . $tarif['prix'] . "€.<br>Vous allez recevoir un mail avec les détails de la réservation.";
             $messageType = 'success';
         } catch (Exception $e) {
             $message = $e->getMessage();

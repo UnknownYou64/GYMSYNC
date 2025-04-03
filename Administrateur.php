@@ -253,7 +253,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
             </div>
         </div>
+
+
+
+        <div class="col-md-6">
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Modifier actualité </h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="table-responsive">
+                        
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+
+
+
 
     
     
