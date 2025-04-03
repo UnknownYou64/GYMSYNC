@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Mer 02 Avril 2025 à 12:06
+-- Généré le :  Jeu 03 Avril 2025 à 09:41
 -- Version du serveur :  5.7.11
 -- Version de PHP :  7.0.3
 
@@ -65,7 +65,21 @@ CREATE TABLE `historique` (
 --
 
 INSERT INTO `historique` (`id`, `Action`, `DateAction`) VALUES
-(1, 'Supprimer LOTZ', '2025-04-02 02:21:16');
+(23, 'Statut de paiement du membre #12 modifié : à payer', '2025-04-02 12:26:53'),
+(24, 'Paiement validé pour le membre #1 : lotz william', '2025-04-02 12:27:55'),
+(25, 'Paiement validé pour le membre #10 : walzer wladimir', '2025-04-02 12:27:55'),
+(26, 'Paiement validé pour le membre #1 : lotz william', '2025-04-02 12:28:21'),
+(27, 'Paiement validé pour le membre #10 : walzer wladimir', '2025-04-02 12:28:21'),
+(28, 'Paiement validé pour le membre #1 : lotz william', '2025-04-02 12:28:27'),
+(29, 'Paiement validé pour le membre #15 : miquau amaury', '2025-04-02 12:28:27'),
+(30, 'Paiement validé pour le membre #3 : miremont bixente', '2025-04-02 12:29:03'),
+(31, 'Paiement validé pour le membre #3 : miremont bixente', '2025-04-02 12:29:09'),
+(32, 'Paiement validé pour le membre #3 : miremont bixente', '2025-04-02 12:32:06'),
+(33, 'Paiement validé pour le membre #3 : miremont bixente', '2025-04-02 12:32:06'),
+(34, 'Paiement validé pour le membre #12 : Chipy Thibault', '2025-04-02 12:40:19'),
+(35, 'Paiement validé pour le membre #11 : Duthil Maceo', '2025-04-02 12:40:19'),
+(36, 'Paiement validé pour le membre #9 : Proust Tom', '2025-04-02 12:40:25'),
+(37, 'Paiement validé pour le membre #10 : walzer wladimir', '2025-04-02 12:40:25');
 
 -- --------------------------------------------------------
 
@@ -79,7 +93,6 @@ CREATE TABLE `membre` (
   `Prenom` varchar(255) NOT NULL,
   `Mail` varchar(255) NOT NULL,
   `Code` varchar(255) DEFAULT NULL,
-  `statut_paiement` tinyint(1) NOT NULL DEFAULT '0',
   `date_inscription` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `tarif_id` int(11) DEFAULT NULL,
   `A_Regler` int(11) NOT NULL
@@ -89,19 +102,19 @@ CREATE TABLE `membre` (
 -- Contenu de la table `membre`
 --
 
-INSERT INTO `membre` (`Identifiant`, `Nom`, `Prenom`, `Mail`, `Code`, `statut_paiement`, `date_inscription`, `tarif_id`, `A_Regler`) VALUES
-(1, 'lotz', 'william', 'william.lotz64500@gmail.com', 'db2b8af4', 0, '2025-03-26 14:00:54', 2, 0),
-(3, 'miremont', 'bixente', 'm.bixente@gmail.com', NULL, 0, '2025-03-26 14:00:54', NULL, 0),
-(4, 'guerin', 'maxime', 'm.guerin@gmail.com', NULL, 0, '2025-03-26 14:00:54', NULL, 0),
-(7, 'lotz', 'valerie', 'valerie.lotz03@gmail.com', 'b505da59', 0, '2025-03-26 14:00:54', NULL, 0),
-(9, 'Proust', 'Tom', 'william.lotz64@gmail.com', NULL, 0, '2025-03-26 14:00:54', NULL, 0),
-(10, 'walzer', 'wladimir', 'wiwilotz64@gmail.com', '47663879', 0, '2025-03-26 14:00:54', NULL, 0),
-(11, 'Duthil', 'Maceo', 'Maceo.D@gmail.com', NULL, 0, '2025-03-26 14:00:54', NULL, 0),
-(12, 'Chipy', 'Thibault', 'T.Chipy@gmail.com', NULL, 0, '2025-03-26 14:00:54', NULL, 0),
-(13, 'Lipsky', 'Ben', 'Lipsky.ben@gmail.com', 'c9e4aae4', 0, '2025-03-26 14:00:54', NULL, 0),
-(14, 'betton', 'dimitri', 'D.betton@gmail.com', '43263854', 0, '2025-03-26 14:00:54', NULL, 0),
-(15, 'miquau', 'amaury', 'm.miquau@gmail.com', '32744445', 0, '2025-03-26 14:00:54', NULL, 0),
-(16, 'Lipsky', 'ben', 'B.lipsky@gmail.com', NULL, 0, '2025-04-02 13:48:58', NULL, 0);
+INSERT INTO `membre` (`Identifiant`, `Nom`, `Prenom`, `Mail`, `Code`, `date_inscription`, `tarif_id`, `A_Regler`) VALUES
+(1, 'lotz', 'william', 'william.lotz64500@gmail.com', 'db2b8af4', '2025-03-26 14:00:54', 2, 1),
+(3, 'miremont', 'bixente', 'm.bixente@gmail.com', NULL, '2025-03-26 14:00:54', NULL, 0),
+(4, 'guerin', 'maxime', 'm.guerin@gmail.com', NULL, '2025-03-26 14:00:54', NULL, 0),
+(7, 'lotz', 'valerie', 'valerie.lotz03@gmail.com', 'b505da59', '2025-03-26 14:00:54', NULL, 0),
+(9, 'Proust', 'Tom', 'william.lotz64@gmail.com', NULL, '2025-03-26 14:00:54', NULL, 1),
+(10, 'walzer', 'wladimir', 'wiwilotz64@gmail.com', '47663879', '2025-03-26 14:00:54', NULL, 1),
+(11, 'Duthil', 'Maceo', 'Maceo.D@gmail.com', NULL, '2025-03-26 14:00:54', NULL, 1),
+(12, 'Chipy', 'Thibault', 'T.Chipy@gmail.com', NULL, '2025-03-26 14:00:54', NULL, 1),
+(13, 'Lipsky', 'Ben', 'Lipsky.ben@gmail.com', 'c9e4aae4', '2025-03-26 14:00:54', NULL, 0),
+(14, 'betton', 'dimitri', 'D.betton@gmail.com', '43263854', '2025-03-26 14:00:54', NULL, 1),
+(15, 'miquau', 'amaury', 'm.miquau@gmail.com', '32744445', '2025-03-26 14:00:54', NULL, 1),
+(16, 'Lipsky', 'ben', 'B.lipsky@gmail.com', NULL, '2025-04-02 13:48:58', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -201,7 +214,6 @@ ALTER TABLE `historique`
 ALTER TABLE `membre`
   ADD PRIMARY KEY (`Identifiant`),
   ADD KEY `tarif_id` (`tarif_id`),
-  ADD KEY `idx_statut_paiement` (`statut_paiement`),
   ADD KEY `idx_date_inscription` (`date_inscription`);
 
 --
@@ -229,7 +241,7 @@ ALTER TABLE `cours`
 -- AUTO_INCREMENT pour la table `historique`
 --
 ALTER TABLE `historique`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT pour la table `membre`
 --
