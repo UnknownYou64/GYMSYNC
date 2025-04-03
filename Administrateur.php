@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $nom = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $code = $membreDao->genererCode($nom, $prenom);
+            $historiques = $historiqueDao->insererhistorique("Génerer un code pour le membre : $nom $prenom");
             $message = "Code généré : $code pour $nom $prenom";
             $messageType = 'success';
         } catch (Exception $e) {
@@ -43,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail = $_POST['mail_member'];
             
             $membreId = $membreDao->ajouterMembre($nom, $prenom, $mail);
-            
+            $historiques = $historiqueDao->insererhistorique("Ajout du membre : $nom $prenom $mail");
             $message = "Membre ajouté avec succès.";
             $messageType = 'success';
         } catch (Exception $e) {
@@ -302,17 +303,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
+<div class="container-fluid">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card p-4 shadow mb-4">
+        <div class="col-12">
+            <div class="card p-4 shadow mb-4 w-100 text-center">
                 <h3 class="text-center">Assistance</h3>
+                <!-- Ajouter un lien vers le document technique -->
 
-
-                <!-- ajouter un lien vers le document technique que je suis entrain de creer -->
             </div>
         </div>
     </div>
 </div>
+
 
 
 
