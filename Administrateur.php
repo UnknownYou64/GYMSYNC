@@ -22,6 +22,19 @@ $messageType = '';
 $historiques = $historiqueDao->recupererhistorique();
 
 
+if (isset($_GET['cours_id'])) {
+    try {
+        $membres = $membreDao->getMembresParCours($_GET['cours_id']);
+        header('Content-Type: application/json');
+        echo json_encode($membres);
+        exit;
+    } catch (Exception $e) {
+        header('HTTP/1.1 500 Internal Server Error');
+        echo json_encode(['error' => $e->getMessage()]);
+        exit;
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generer_code'])) {
         try {
@@ -198,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="mb-3">
                         <label class="form-label">Sélectionner un membre</label>
                         <select name="membre_id" id="membre_select" class="form-control" disabled>
-                            
+                            <option value="">Choisir un membre</option>
                         </select>
                     </div>
                     <div class="d-grid gap-2">
@@ -231,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <tbody>
                                 <?php 
                                 $membres = $membreDao->getMembresNonPaye(); 
-                                foreach ($membres as $membre): 
+                                foreach ($membres as $membre){
                                 ?>
                                 <tr>
                                     <td class="text-center">
@@ -242,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <td><?= $membre['Prenom'] ?></td>
                                     <td><span class="badge bg-warning">Non Payer</span></td>
                                 </tr>
-                                <?php endforeach; ?>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
@@ -326,9 +339,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 document.getElementById('cours_select').addEventListener('change', function() {
     const cours_id = this.value;
     const membre_select = document.getElementById('membre_select');
+    
     if (cours_id) {
-        fetch(`get_membres_cours.php?cours_id=${cours_id}`)
-            .then(response => response.json())
+        fetch(`Administrateur.php?cours_id=${cours_id}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Erreur réseau');
+                return response.json();
+            })
             .then(membres => {
                 membre_select.innerHTML = '<option value="">Choisir un membre</option>';
                 membres.forEach(membre => {
@@ -337,6 +354,11 @@ document.getElementById('cours_select').addEventListener('change', function() {
                     </option>`;
                 });
                 membre_select.disabled = false;
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                membre_select.innerHTML = '<option value="">Erreur de chargement</option>';
+                membre_select.disabled = true;
             });
     } else {
         membre_select.innerHTML = '<option value="">Choisir d\'abord un cours</option>';

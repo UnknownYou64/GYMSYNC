@@ -100,16 +100,13 @@ class MembreDao extends BaseDonneeDao {
     }
 
     public function getMembresParCours($cours_id) {
-        $sql = "SELECT m.* 
+        $sql = "SELECT m.Identifiant, m.Nom, m.Prenom 
                 FROM membre m 
-                JOIN reservation r ON m.Identifiant = r.Identifiant 
+                INNER JOIN reservation r ON m.Identifiant = r.Identifiant 
                 WHERE r.IDC = :cours_id 
                 ORDER BY m.Nom, m.Prenom";
-        
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindParam(':cours_id', $cours_id, PDO::PARAM_INT);
-        $stmt->execute();
-        
+        $stmt->execute(['cours_id' => $cours_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
