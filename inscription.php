@@ -10,12 +10,10 @@ require_once __DIR__ . '/dao/TarifDao.php';
 require_once __DIR__ . '/dao/MembreDao.php';
 require_once __DIR__ . '/dao/CoursDao.php';
 
-// Initialisation des DAO
 $tarifDao = new TarifDao();
 $membreDao = new MembreDao();
 $coursDao = new CoursDao();
 
-// Récupération des cours disponibles
 try {
     $coursDisponibles = $coursDao->recupererCoursDisponibles();
 } catch (Exception $e) {
@@ -84,14 +82,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire d'inscription</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/inscription.css">
 </head>
 <body>
-<?php
-    include 'NavBar.php';
-?>
+    <?php include 'NavBar.php'; ?>
 
-    <header class="bg-dark text-white text-center py-3">
+    <header class="header-inscription text-center">
         <h1>Formulaire d'inscription</h1>
     </header>
 
@@ -104,9 +101,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card p-4 shadow">
-                    <h3 class="text-center">Sélection des cours</h3>
+            <div class="col-md-8">
+                <div class="carte-cours">
+                    <h3 class="titre-selection text-center">Sélection des cours</h3>
                     <form method="POST" action="inscription.php">
                         <div class="mb-3">
                             <label class="form-label">Type d'adhérent</label>
@@ -155,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <p class="alert alert-info">Aucun cours disponible</p>
                             <?php } ?>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">S'inscrire aux cours</button>
+                        <button type="submit" class="btn btn-inscription w-100">S'inscrire aux cours</button>
                     </form>
                 </div>
             </div>

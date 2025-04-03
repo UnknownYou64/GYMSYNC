@@ -1,0 +1,34 @@
+.barre-navigation {
+    background-color: #06070a;
+}
+
+.marque-nav {
+    color: #7231ff;
+    font-weight: bold;
+}
+
+.lien-nav {
+    color: #7231ff;
+    transition: color 0.3s ease;
+}
+
+.lien-nav:hover {
+    color: #ffc01d;
+}
+
+.lien-nav.actif {
+    color: #ffc01d;
+    font-weight: bold;
+}
+
+.bouton-deconnexion {
+    background-color: #ffc01d;
+    border-color: #ffc01d;
+    color: #7231ff;
+}
+
+.bouton-deconnexion:hover {
+    background-color: #e6ad1a;
+    border-color: #e6ad1a;
+}
+
