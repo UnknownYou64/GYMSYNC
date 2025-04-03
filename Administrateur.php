@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail = $_POST['mail_member'];
             
             $membreId = $membreDao->ajouterMembre($nom, $prenom, $mail);
-            
+            $historiques = $historiqueDao->insererhistorique("Ajout du membre : $nom $prenom $mail");
             $message = "Membre ajouté avec succès.";
             $messageType = 'success';
         } catch (Exception $e) {
