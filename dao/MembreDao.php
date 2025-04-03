@@ -145,4 +145,19 @@ class MembreDao extends BaseDonneeDao {
         $stmt->bindParam(':membre_id', $membre_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function basculerValidation($membre_id) {
+        $sql = "UPDATE membre 
+                SET A_Regler = CASE WHEN A_Regler = 0 THEN 1 ELSE 0 END 
+                WHERE Identifiant = :membre_id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['membre_id' => $membre_id]);
+    }
+
+
+    public function getMembresNonPaye() {
+        $sql = "SELECT * FROM membre WHERE A_Regler = 0 ORDER BY Nom, Prenom";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -10,7 +10,8 @@ require_once 'Connexion.php';
 require_once 'dao/BaseDonneeDao.php';
 require_once 'dao/CoursDao.php';
 require_once 'dao/MembreDao.php';
-require_once 'dao/historiqueDao.php';
+require_once 'dao/HistoriqueDao.php';
+
 // Initialisation des DAO
 $coursDao = new CoursDao();
 $membreDao = new MembreDao();
@@ -19,6 +20,7 @@ $message = '';
 $messageType = '';
 
 $historiques = $historiqueDao->recupererhistorique();
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['generer_code'])) {
@@ -80,6 +82,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $messageType = 'danger';
         }
     }
+
+    if (isset($_POST['valider_paiements'])) {
+        try {
+            if (!empty($_POST['membres'])) {
+                foreach ($_POST['membres'] as $membre_id) {
+                    $membreDao->basculerValidation($membre_id);
+                    $membre = $membreDao->getMembre($membre_id);
+                }
+                $message = "Les paiements sélectionnés ont été validés avec succès.";
+                $messageType = 'success';
+            } else {
+                $message = "Veuillez sélectionner au moins un membre.";
+                $messageType = 'warning';
+            }
+        } catch (Exception $e) {
+            $message = "Erreur lors de la validation : " . $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
 }
 
 ?>
@@ -111,6 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php endif; ?>
 
     <div class="row justify-content-center">
+        <!-- Première ligne -->
         <div class="col-md-6">
             <!-- Générateur de code -->
             <div class="card p-4 shadow mb-4">
@@ -127,7 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" name="generer_code" class="btn btn-primary w-100">Générer le code</button>
                 </form>
             </div>
+        </div>
 
+        <div class="col-md-6">
             <!-- Ajout de membre -->
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Ajouter un Membre</h3>
@@ -147,7 +171,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" name="ajout_membre" class="btn btn-success w-100">Enregistrer le membre</button>
                 </form>
             </div>
+        </div>
 
+        <!-- Deuxième ligne -->
+        <div class="col-md-6">
             <!-- Gestion des cours -->
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Gestion des Cours</h3>
@@ -183,14 +210,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </form>
             </div>
+        </div>
 
-
-
-        
+        <div class="col-md-6">
+            <!-- Liste des Membres à Valider -->
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Liste des Membres à Valider</h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th><input type="checkbox" id="selectAll" class="form-check-input"></th>
+                                    <th>Nom</th>
+                                    <th>Prénom</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                $membres = $membreDao->getMembresNonPaye(); 
+                                foreach ($membres as $membre): 
+                                ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="membres[]" value="<?= $membre['Identifiant'] ?>" 
+                                            class="form-check-input membre-checkbox">
+                                    </td>
+                                    <td><?= $membre['Nom'] ?></td>
+                                    <td><?= $membre['Prenom'] ?></td>
+                                    <td><span class="badge bg-warning">Non Payer</span></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-grid gap-2 mt-3">
+                        <button type="submit" name="valider_paiements" class="btn btn-success">
+                            Valider les paiements sélectionnés
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
-
+    
+    
 
     <div class="row justify-content-center mt-4">
     <div class="col-md-8">
@@ -257,6 +323,14 @@ document.getElementById('cours_select').addEventListener('change', function() {
     } else {
         membre_select.innerHTML = '<option value="">Choisir d\'abord un cours</option>';
         membre_select.disabled = true;
+    }
+});
+
+
+document.getElementById('selectAll').addEventListener('change', function() {
+    const checkboxes = document.getElementsByClassName('membre-checkbox');
+    for(let checkbox of checkboxes) {
+        checkbox.checked = this.checked;
     }
 });
 </script>

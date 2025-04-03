@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/BaseDonneeDao.php';
+require_once 'dao/BaseDonneeDao.php';
 
 class HistoriqueDao extends BaseDonneeDao {
     public function __construct() {
