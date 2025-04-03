@@ -19,7 +19,8 @@ class HistoriqueDao extends BaseDonneeDao {
     // Récupérer l'historique
     public function recupererhistorique(){
         $sql = "SELECT h.Action, h.DateAction
-                FROM historique h";
+                FROM historique h
+                ORDER BY h.DateAction DESC";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
