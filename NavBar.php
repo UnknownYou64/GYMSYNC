@@ -3,6 +3,8 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
+<link rel="stylesheet" href="css/style.css">
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="index.php">GYMSYNC</a>

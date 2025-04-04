@@ -32,3 +32,118 @@
     border-color: #e6ad1a;
 }
 
+
+.navbar {
+    background: linear-gradient(to right, #1f2330, #2a2d3d) ;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    color: #7231ff ;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: #ffc01d ;
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: #ffc01d ;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(114, 49, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    background-color: #7231ff;
+    color: #ffc01d ;
+}
+
+.btn-danger {
+    background-color: #7231ff;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #ffc01d;
+    color: #7231ff;
+    transform: translateY(-2px);
+}
+
+
+.navbar-toggler {
+    border: 2px solid #7231ff;
+    padding: 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(114, 49, 255, 0.25);
+}
+
+
+
+
+/* pour le téléphone */
+@media (max-width: 1000px) {
+    .navbar-collapse {
+        background-color: #1f2330;
+        padding: 1rem;
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-item {
+        margin: 0.5rem 0;
+    }
+    .table {
+        font-size: 0.8rem;
+    }
+
+    .table td, 
+    .table th {
+        padding: 0.4rem;
+    }
+
+    .table td:first-child {
+        width: 40px;
+    }
+
+    .form-check-input {
+        width: 1.8em;
+        height: 1.8em;
+    }
+
+    .carte-cours {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .titre-selection {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-inscription {
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+   
+    
+}
+
