@@ -78,6 +78,12 @@ header h1 {
     box-shadow: 0 6px 20px rgba(0, 176, 155, 0.3);
 }
 
+.btn-danger {
+    background: linear-gradient(90deg, #cb2d3e, #ef473a);
+    border: none;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+}
+
 .alert {
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -108,12 +114,12 @@ footer {
 
 .header-inscription {
     background-color: rgba(var(--bs-dark-rgb));
-    padding: 2rem;
+    padding: 16px;
     margin-bottom: 2rem;
 }
 
 .header-inscription h1 {
-    color: #ffc01d;
+    color: #ffffff;
     font-weight: 600;
     font-size: 2.5rem;
 }
