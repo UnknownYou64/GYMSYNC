@@ -34,7 +34,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php } ?>
                 
                 <?php if (isset($_SESSION['role'])) { ?>
-                    <a href="logout.php" class="btn btn-danger">Déconnexion</a>
+                    <a href="Logout.php" class="btn btn-danger">Déconnexion</a>
                 <?php } else { ?>
                     <li class="nav-item me-3">
                         <a class="nav-link <?php echo ($current_page == 'Login.php') ? 'active' : ''; ?>" 
