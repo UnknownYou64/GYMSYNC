@@ -99,10 +99,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['suppr_cours'])) {
         try {
             $cours_id = $_POST['cours_id'];
-            
+
+            $historiqueInfos = $historiqueDao->recupHistoCours($cours_id);
+
             $coursDao->supprimerToutesReservations($cours_id);
             
             $coursDao->supprimerCours($cours_id);
+
+            if (!empty($historiqueInfos)) {
+                $info = $historiqueInfos[0];
+                $nature = $info['Nature'];
+                $jour = $info['Jour'];
+                $heure = $info['Heure'];
+    
+                $messageHist = "Suppression du cours : $nature du $jour à $heure";
+            }
+    
+            $historiqueDao->insererhistorique($messageHist);
+            $historiques = $historiqueDao->recupererhistorique();
             
             $message = "Le cours a été supprimé avec succès.";
             $messageType = 'success';
