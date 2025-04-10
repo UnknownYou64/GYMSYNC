@@ -71,7 +71,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $membre_id = $_POST['membre_id'];
             $cours_id = $_POST['cours_id'];
             
+            $historiqueInfos = $historiqueDao->recupHistMembreCours($membre_id, $cours_id);
             $coursDao->supprimerMemberDuCours($membre_id, $cours_id);
+
+            if (!empty($historiqueInfos)) {
+                $info = $historiqueInfos[0];
+                $nom = $info['Nom'];
+                $prenom = $info['Prenom'];
+                $nature = $info['Nature'];
+    
+                $messageHist = "Suppression du membre : $prenom $nom du cours $nature";
+            }
+    
+            $historiqueDao->insererhistorique($messageHist);
+            $historiques = $historiqueDao->recupererhistorique();
             
             $message = "Membre retiré du cours avec succès.";
             $messageType = 'success';
