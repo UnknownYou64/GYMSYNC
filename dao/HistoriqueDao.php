@@ -28,7 +28,7 @@ class HistoriqueDao extends BaseDonneeDao {
 
 
     public function recupHistMembreCours($idmembre, $idcours) {
-        $sql = "SELECT m.Nom, m.Prenom, c.Nature
+        $sql = "SELECT m.Nom, m.Prenom, c.Nature, c.Jour, c.Heure
                 FROM membre m
                 JOIN reservation r ON m.Identifiant = r.Identifiant
                 JOIN cours c ON c.IDC = r.IDC
