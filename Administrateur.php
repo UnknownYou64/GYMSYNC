@@ -332,7 +332,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($historiques as $historique): ?>
+                        <?php foreach (array_slice($historiques, 0, 10) as $historique): ?>
                             <tr>
                                 <td><?= htmlspecialchars($historique['Action']) ?></td>
                                 <td><?= htmlspecialchars($historique['DateAction']) ?></td>
