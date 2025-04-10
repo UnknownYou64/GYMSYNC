@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $jour = $info['Jour'];
                 $heure = $info['Heure'];
     
-                $messageHist = "Suppression du membre : $prenom $nom du cours $nature";
+                $messageHist = "Suppression du membre : $prenom $nom du cours $nature du $jour à $heure";
             }
     
             $historiqueDao->insererhistorique($messageHist);
