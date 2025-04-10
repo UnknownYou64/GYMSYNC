@@ -44,7 +44,7 @@ class HistoriqueDao extends BaseDonneeDao {
         
         
         public function recupHistoCours($idcours) {
-        $sql = "SELECT Nature
+        $sql = "SELECT Nature, Jour, Heure
                 FROM cours
                 WHERE IDC = :idcours";
     
