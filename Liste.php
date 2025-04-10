@@ -1,11 +1,7 @@
 <?php
 session_start();
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['role'])) {
-    header('Location: login.php');
-    exit;
-}
+
 
 require_once __DIR__ . '/dao/CoursDao.php';
 
