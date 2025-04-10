@@ -79,6 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $nom = $info['Nom'];
                 $prenom = $info['Prenom'];
                 $nature = $info['Nature'];
+                $jour = $info['Jour'];
+                $heure = $info['Heure'];
     
                 $messageHist = "Suppression du membre : $prenom $nom du cours $nature";
             }
