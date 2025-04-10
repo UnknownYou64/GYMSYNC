@@ -306,11 +306,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 
     <div class="row justify-content-center mt-4">
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card p-4 shadow mb-4">
             <h3 class="text-center">Historique</h3>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered fs-8">
+                <table class="table table-striped table-bordered fs-5">
                     <thead class="table-dark">
                         <tr>
                             <th>Action</th>
