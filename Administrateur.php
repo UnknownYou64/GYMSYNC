@@ -310,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="card p-4 shadow mb-4">
             <h3 class="text-center">Historique</h3>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered fs-5">
+                <table class="table table-striped table-bordered fs-3">
                     <thead class="table-dark">
                         <tr>
                             <th>Action</th>
