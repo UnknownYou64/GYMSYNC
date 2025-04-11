@@ -36,29 +36,24 @@ if (isset($_GET['cours_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['generer_code'])) {
-        try {
-            $nom = $_POST['nom'];
-            $prenom = $_POST['prenom'];
-            $code = $membreDao->genererCode($nom, $prenom);
-            $historiques = $historiqueDao->insererhistorique("Génerer un code pour le membre : $nom $prenom");
-            $message = "Code généré : $code pour $nom $prenom";
-            $messageType = 'success';
-        } catch (Exception $e) {
-            $message = $e->getMessage();
-            $messageType = 'danger';
-        }
-    }
+    
 
-    if (isset($_POST['ajout_membre'])) {
+    if (isset($_POST['ajout_membre_avec_code'])) {
         try {
             $nom = $_POST['nom_member'];
             $prenom = $_POST['prenom_member'];
             $mail = $_POST['mail_member'];
             
+            // Ajouter le membre
             $membreId = $membreDao->ajouterMembre($nom, $prenom, $mail);
-            $historiques = $historiqueDao->insererhistorique("Ajout du membre : $nom $prenom $mail");
-            $message = "Membre ajouté avec succès.";
+            
+            // Générer le code
+            $code = $membreDao->genererCode($nom, $prenom);
+            
+            // Ajouter à l'historique
+            $historiqueDao->insererhistorique("Ajout du membre et génération de code pour : $nom $prenom");
+            
+            $message = "Membre ajouté avec succès. Code généré : $code";
             $messageType = 'success';
         } catch (Exception $e) {
             $message = $e->getMessage();
@@ -149,26 +144,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="row justify-content-center">
         <!-- Première ligne -->
-        <div class="col-md-6">
-            <!-- Générateur de code -->
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Générer un Code d'Accès</h3>
-                <form method="POST" action="Administrateur.php">
-                    <div class="mb-3">
-                        <label for="nom" class="form-label">Nom du membre</label>
-                        <input type="text" class="form-control" id="nom" name="nom" placeholder="Saisir le nom" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="prenom" class="form-label">Prénom du membre</label>
-                        <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Saisir le prénom" required>
-                    </div>
-                    <button type="submit" name="generer_code" class="btn btn-primary w-100">Générer le code</button>
-                </form>
-            </div>
-        </div>
+       
 
         <div class="col-md-6">
-            <!-- Ajout de membre -->
+            
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Ajouter un Membre</h3>
                 <form method="POST" action="Administrateur.php">
@@ -184,7 +163,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label for="mail_member" class="form-label">Adresse e-mail</label>
                         <input type="email" class="form-control" id="mail_member" name="mail_member" required>
                     </div>
-                    <button type="submit" name="ajout_membre" class="btn btn-success w-100">Enregistrer le membre</button>
+                    <button type="submit" name="ajout_membre_avec_code" class="btn btn-success w-100">
+                        Enregistrer le membre et générer le code
+                    </button>
                 </form>
             </div>
         </div>
@@ -272,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Modifier actualité </h3>
                 <form method="POST" action="Administrateur.php">
