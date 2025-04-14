@@ -11,6 +11,7 @@ require_once 'dao/BaseDonneeDao.php';
 require_once 'dao/CoursDao.php';
 require_once 'dao/MembreDao.php';
 require_once 'dao/HistoriqueDao.php';
+require_once 'dao/ExportDao.php';
 
 // Initialisation des DAO
 $coursDao = new CoursDao();
@@ -139,6 +140,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $messageType = 'danger';
         }
     }
+
+    if (isset($_POST['export_csv'])) {
+        try {
+            $exportDao = new ExportDao();
+            $cours_id = $_POST['cours_id'];
+            
+            // Ajouter à l'historique avant l'export
+            $cours = $coursDao->getCours($cours_id);
+            $historiqueDao->insererhistorique("Export CSV du cours : {$cours['Nature']} du {$cours['Jour']}");
+            
+            $exportDao->exporterCoursCSV($cours_id);
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
+
+    if (isset($_POST['export_tous_cours'])) {
+        try {
+            $exportDao = new ExportDao();
+            $historiqueDao->insererhistorique("Export CSV de tous les cours");
+            $exportDao->exporterTousLesCoursCSV();
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
 }
 
 ?>
@@ -232,6 +260,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </button>
                         <button type="submit" name="suppr_cours" class="btn btn-danger">
                             Supprimer ce cours
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Nouvelle div pour les boutons d'export -->
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Exporter les Données</h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="mb-3">
+                        <label class="form-label">Sélectionner un cours pour l'export</label>
+                        <select name="cours_id" class="form-control">
+                            <option value="">Choisir un cours</option>
+                            <?php 
+                            foreach ($cours as $c) {
+                                echo "<option value='" . $c['IDC'] . "'>" 
+                                    . $c['Jour'] . " à " 
+                                    . date('H:i', strtotime($c['Heure'])) . " - " 
+                                    . $c['Nature'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" name="export_csv" class="btn btn-success">
+                            <i class="fas fa-file-excel"></i> Exporter le cours sélectionné
+                        </button>
+                        <button type="submit" name="export_tous_cours" class="btn btn-primary">
+                            <i class="fas fa-file-excel"></i> Exporter tous les cours
                         </button>
                     </div>
                 </form>

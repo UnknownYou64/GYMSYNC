@@ -100,7 +100,7 @@ class MembreDao extends BaseDonneeDao {
     }
 
     public function getMembresParCours($cours_id) {
-        $sql = "SELECT m.Identifiant, m.Nom, m.Prenom 
+        $sql = "SELECT m.Identifiant, m.Nom, m.Prenom, m.Mail, m.A_Regler as Validation
                 FROM membre m 
                 INNER JOIN reservation r ON m.Identifiant = r.Identifiant 
                 WHERE r.IDC = :cours_id 

@@ -126,4 +126,19 @@ class CoursDao extends BaseDonneeDao {
         $stmt->bindParam(':cours_id', $cours_id, PDO::PARAM_INT);
         return $stmt->execute();
     }
+
+    public function getCours($id) {
+        $sql = "SELECT C.IDC, C.Nature, C.Jour, C.Heure, C.Place, C.Professeur 
+                FROM cours C 
+                WHERE C.IDC = $id";
+        
+        $resultat = $this->pdo->query($sql);
+        $cours = $resultat->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$cours) {
+            throw new Exception("Cours non trouvé");
+        }
+        
+        return $cours;
+    }
 }
