@@ -202,10 +202,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="row justify-content-center">
         <!-- Première ligne -->
        
-
+        <div class="row mb-4 ">
         <div class="col-md-6">
             
-            <div class="card p-4 shadow mb-4">
+            <div class="card p-4  shadow ">
                 <h3 class="text-center">Ajouter un Membre</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
@@ -230,7 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Deuxième ligne -->
         <div class="col-md-6">
             <!-- Gestion des cours -->
-            <div class="card p-4 shadow mb-4">
+            <div class="card p-4  shadow ">
                 <h3 class="text-center">Gestion des Cours</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
@@ -264,8 +264,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </form>
             </div>
+            </div>
+            
+            <div class="col-md-6">
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Modifier actualité </h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="table-responsive">
+                        
+                    </div>
+                </form>
+            </div>
+            </div>
 
             <!-- Nouvelle div pour les boutons d'export -->
+            <div class="col-md-6">
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Exporter les Données</h3>
                 <form method="POST" action="Administrateur.php">
@@ -293,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </form>
             </div>
-        </div>
+            </div>
 
         <div class="col-md-6">
             <!-- Liste des Membres à Valider -->
@@ -339,16 +352,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-        <div class="col-md-6">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Modifier actualité </h3>
-                <form method="POST" action="Administrateur.php">
-                    <div class="table-responsive">
-                        
-                    </div>
-                </form>
-            </div>
-        </div>
+        
     </div>
 
 
