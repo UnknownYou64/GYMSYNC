@@ -66,7 +66,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $membre_id = $_POST['membre_id'];
             $cours_id = $_POST['cours_id'];
             
+            $historiqueInfos = $historiqueDao->recupHistMembreCours($membre_id, $cours_id);
             $coursDao->supprimerMemberDuCours($membre_id, $cours_id);
+
+            if (!empty($historiqueInfos)) {
+                $info = $historiqueInfos[0];
+                $nom = $info['Nom'];
+                $prenom = $info['Prenom'];
+                $nature = $info['Nature'];
+                $jour = $info['Jour'];
+                $heure = $info['Heure'];
+    
+                $messageHist = "Suppression du membre : $prenom $nom du cours $nature du $jour à $heure";
+            }
+    
+            $historiqueDao->insererhistorique($messageHist);
+            $historiques = $historiqueDao->recupererhistorique();
             
             $message = "Membre retiré du cours avec succès.";
             $messageType = 'success';
@@ -79,10 +94,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['suppr_cours'])) {
         try {
             $cours_id = $_POST['cours_id'];
-            
+
+            $historiqueInfos = $historiqueDao->recupHistoCours($cours_id);
+
             $coursDao->supprimerToutesReservations($cours_id);
             
             $coursDao->supprimerCours($cours_id);
+
+            if (!empty($historiqueInfos)) {
+                $info = $historiqueInfos[0];
+                $nature = $info['Nature'];
+                $jour = $info['Jour'];
+                $heure = $info['Heure'];
+    
+                $messageHist = "Suppression du cours : $nature du $jour à $heure";
+            }
+    
+            $historiqueDao->insererhistorique($messageHist);
+            $historiques = $historiqueDao->recupererhistorique();
             
             $message = "Le cours a été supprimé avec succès.";
             $messageType = 'success';
@@ -272,11 +301,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 
     <div class="row justify-content-center mt-4">
-    <div class="col-md-8">
+    <div class="col-12">
         <div class="card p-4 shadow mb-4">
             <h3 class="text-center">Historique</h3>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered fs-5">
                     <thead class="table-dark">
                         <tr>
                             <th>Action</th>
@@ -284,7 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($historiques as $historique): ?>
+                        <?php foreach (array_slice($historiques, 0, 10) as $historique): ?>
                             <tr>
                                 <td><?= htmlspecialchars($historique['Action']) ?></td>
                                 <td><?= htmlspecialchars($historique['DateAction']) ?></td>
