@@ -93,12 +93,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </header>
 
     <div class="container my-4">
-        <?php if ($message): ?>
+        <?php if ($message){?>
             <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
                 <?php echo $message; ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        <?php endif; ?>
+        <?php } ?>
 
         <div class="row justify-content-center">
             <div class="col-md-8">

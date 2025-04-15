@@ -12,6 +12,7 @@ require_once 'dao/CoursDao.php';
 require_once 'dao/MembreDao.php';
 require_once 'dao/HistoriqueDao.php';
 require_once 'dao/ExportDao.php';
+require_once 'dao/ActualiteDao.php';
 
 // Initialisation des DAO
 $coursDao = new CoursDao();
@@ -167,6 +168,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $messageType = 'danger';
         }
     }
+
+    if (isset($_POST['ajouter_actualite'])) {
+        try {
+            $texte = $_POST['nouveau_texte'];
+            $couleur = $_POST['nouvelle_couleur'];
+            $gras = isset($_POST['nouveau_gras']) ? 1 : 0;
+            
+            $actualiteDao = new ActualiteDao();
+          
+            $actualites = $actualiteDao->getAllActualites();
+            $ordre = count($actualites) + 1;
+            
+            $actualiteDao->ajouterActualite($texte, $couleur, $gras, $ordre);
+            $historiqueDao->insererhistorique("Ajout d'une nouvelle actualité");
+            
+            $message = "L'actualité a été ajoutée avec succès.";
+            $messageType = 'success';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
+
+    if (isset($_POST['sauvegarder_actualites'])) {
+        $actualiteDao = new ActualiteDao();
+        try {
+            foreach ($_POST['actualite'] as $id => $data) {
+
+                $actualiteDao->updateActualite(
+                    $id,
+                    $data['texte'],
+                    $data['couleur'],
+                    isset($data['gras']) ? 1 : 0
+                );
+            }
+            $historiqueDao->insererhistorique("Modification des actualités");
+            $message = "Les actualités ont été mises à jour avec succès.";
+            $messageType = 'success';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
+
+    if (isset($_POST['supprimer_actualite'])) {
+        try {
+            $id = $_POST['supprimer_actualite'];
+            $actualiteDao = new ActualiteDao();
+            $actualiteDao->supprimerActualite($id);
+            
+            $historiqueDao->insererhistorique("Suppression d'une actualité");
+            
+            $message = "L'actualité a été supprimée avec succès.";
+            $messageType = 'success';
+        } catch (Exception $e) {
+            $message = $e->getMessage();
+            $messageType = 'danger';
+        }
+    }
 }
 
 ?>
@@ -192,20 +252,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </header>
 
 <div class="container my-4">
-    <?php if ($message): ?>
+    <?php if ($message){ ?>
         <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
             <?php echo $message; ?>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
         </div>
-    <?php endif; ?>
+    <?php } ?>
 
-    <div class="row justify-content-center">
+    <div class="row g-3 justify-content-center">
         <!-- Première ligne -->
        
-        <div class="row mb-4 ">
-        <div class="col-md-6">
+        <div class="row g-3">
+        <div class="col-12 col-md-6">
             
-            <div class="card p-4  shadow ">
+            <div class="card p-3 shadow-sm">
                 <h3 class="text-center">Ajouter un Membre</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
@@ -228,9 +288,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <!-- Deuxième ligne -->
-        <div class="col-md-6">
+        <div class="col-12 col-md-6">
             <!-- Gestion des cours -->
-            <div class="card p-4  shadow ">
+            <div class="card p-3 shadow-sm">
                 <h3 class="text-center">Gestion des Cours</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="mb-3">
@@ -266,51 +326,97 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             </div>
             
-            <div class="col-md-6">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Modifier actualité </h3>
-                <form method="POST" action="Administrateur.php">
-                    <div class="table-responsive">
-                        
+        <div class="col-12 col-md-6">
+            <div class="card p-3 shadow-sm mb-4">
+            <h3 class="text-center">Modifier Actualités</h3>
+            <!-- ajout actu -->
+            <form method="POST" action="Administrateur.php" class="mb-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="nouveau_texte" class="form-label">Nouvelle Actualité</label>
+                            <input type="text" class="form-control" id="nouveau_texte" name="nouveau_texte" required>
+                        </div>
                     </div>
-                </form>
-            </div>
-            </div>
 
-            <!-- Nouvelle div pour les boutons d'export -->
-            <div class="col-md-6">
-            <div class="card p-4 shadow mb-4">
-                <h3 class="text-center">Exporter les Données</h3>
-                <form method="POST" action="Administrateur.php">
-                    <div class="mb-3">
-                        <label class="form-label">Sélectionner un cours pour l'export</label>
-                        <select name="cours_id" class="form-control">
-                            <option value="">Choisir un cours</option>
-                            <?php 
-                            foreach ($cours as $c) {
-                                echo "<option value='" . $c['IDC'] . "'>" 
-                                    . $c['Jour'] . " à " 
-                                    . date('H:i', strtotime($c['Heure'])) . " - " 
-                                    . $c['Nature'] . "</option>";
-                            }
-                            ?>
-                        </select>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="nouvelle_couleur" class="form-label">Couleur</label>
+                            <input type="color" id="nouvelle_couleur" class="ms-4" name="nouvelle_couleur" value="#000000">
+                        </div>
                     </div>
-                    <div class="d-grid gap-2">
-                        <button type="submit" name="export_csv" class="btn btn-success">
-                            <i class="fas fa-file-excel"></i> Exporter le cours sélectionné
-                        </button>
-                        <button type="submit" name="export_tous_cours" class="btn btn-primary">
-                            <i class="fas fa-file-excel"></i> Exporter tous les cours
-                        </button>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Style </label>
+                                <input type="checkbox" class="form-check-input ms-4" id="nouveau_gras" name="nouveau_gras">
+                                <label class="form-check-label ms-2" for="nouveau_gras">Gras</label>
+                            </div>
                     </div>
-                </form>
-            </div>
-            </div>
+                </div>
+                <button type="submit" name="ajouter_actualite" class="btn btn-success w-100">Ajouter l'actualité</button>
+            </form>
 
-        <div class="col-md-6">
+            <hr>
+
+            <!-- Toutes les actualitées -->
+            <form method="POST" action="Administrateur.php">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="min-width: 200px;">Texte</th>
+                                <th style="width: 80px;">Couleur</th>
+                                <th style="width: 60px;">Gras</th>
+                                <th style="width: 100px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $actualiteDao = new ActualiteDao();
+                        $actualites = $actualiteDao->getAllActualites();
+                        foreach ($actualites as $actualite) {
+                        ?>
+                            <tr>
+                                <td>
+                                    <input type="text" class="form-control form-control-sm" 
+                                           name="actualite[<?= $actualite['id'] ?>][texte]" 
+                                           value="<?= $actualite['texte'] ?>">
+                                </td>
+                                <td class="text-center">
+                                    <input type="color" class="form-control form-control-color w-100" 
+                                           name="actualite[<?= $actualite['id'] ?>][couleur]" 
+                                           value="<?= $actualite['couleur'] ?? '#000000' ?>">
+                                </td>
+                                <td class="text-center align-middle">
+                                    <input type="checkbox" class="form-check-input" 
+                                           name="actualite[<?= $actualite['id'] ?>][gras]" 
+                                           <?= $actualite['gras'] ? 'checked' : '' ?>>
+                                </td>
+                                <td class="text-center">
+                                    <button type="submit" class="btn btn-danger btn-sm w-100" 
+                                            name="supprimer_actualite" value="<?= $actualite['id'] ?>">
+                                        Supprimer
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-grid gap-2 mt-3">
+                <button type="submit" name="sauvegarder_actualites" class="btn btn-primary">Sauvegarder les modifications</button>
+                </div>
+            </form>
+            </div>
+        </div>
+        
+
+            
+
+        <div class="col-12 col-md-6">
             <!-- Liste des Membres à Valider -->
-            <div class="card p-4 shadow mb-4">
+            <div class="card p-3 shadow-sm mb-4">
                 <h3 class="text-center">Liste des Membres à Valider</h3>
                 <form method="POST" action="Administrateur.php">
                     <div class="table-responsive">
@@ -352,6 +458,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
+
+
+        <!-- Nouvelle div pour les boutons d'export -->
+        <div class="col-12 col-md-6">
+            <div class="card p-3 shadow-sm mb-4">
+                <h3 class="text-center">Exporter les Données</h3>
+                <form method="POST" action="Administrateur.php">
+                    <div class="mb-3">
+                        <label class="form-label">Sélectionner un cours pour l'export</label>
+                        <select name="cours_id" class="form-control">
+                            <option value="">Choisir un cours</option>
+                            <?php 
+                            foreach ($cours as $c) {
+                                echo "<option value='" . $c['IDC'] . "'>" 
+                                    . $c['Jour'] . " à " 
+                                    . date('H:i', strtotime($c['Heure'])) . " - " 
+                                    . $c['Nature'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" name="export_csv" class="btn btn-success">
+                            <i class="fas fa-file-excel"></i> Exporter le cours sélectionné
+                        </button>
+                        <button type="submit" name="export_tous_cours" class="btn btn-primary">
+                            <i class="fas fa-file-excel"></i> Exporter tous les cours
+                        </button>
+                    </div>
+                </form>
+            </div>
+            </div>
+
+
+
         
     </div>
 
@@ -374,12 +515,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach (array_slice($historiques, 0, 10) as $historique): ?>
+                        <?php foreach (array_slice($historiques, 0, 10) as $historique){ ?>
                             <tr>
                                 <td><?= htmlspecialchars($historique['Action']) ?></td>
                                 <td><?= htmlspecialchars($historique['DateAction']) ?></td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>

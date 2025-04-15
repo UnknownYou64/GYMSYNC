@@ -13,7 +13,8 @@ class CoursDao extends BaseDonneeDao {
                 (c.Place - (SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC)) as places_restantes 
                 FROM cours c 
                 WHERE c.Place > (SELECT COUNT(*) FROM reservation r WHERE r.IDC = c.IDC)
-                ORDER BY c.Jour, c.Heure";
+                ORDER BY FIELD(c.Jour, 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'), 
+                c.Heure";
     
         $resultat = $this->pdo->query($sql);
         return $resultat->fetchAll(PDO::FETCH_ASSOC);

@@ -196,6 +196,22 @@ INSERT INTO `tarifs` (`IDT`, `nbcours`, `categorie`, `prix`) VALUES
 -- Index pour les tables exportées
 --
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `actualites`
+--
+
+CREATE TABLE actualites (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    texte TEXT NOT NULL,
+    couleur VARCHAR(50) DEFAULT NULL,
+    gras BOOLEAN DEFAULT FALSE,
+    ordre INT NOT NULL,
+    date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
 --
 -- Index pour la table `cours`
 --

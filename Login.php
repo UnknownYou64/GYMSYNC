@@ -64,12 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
 
     <div class="container my-5">
-        <?php if ($message): ?>
+        <?php if ($message){ ?>
             <div class="alert alert-<?= $messageType ?> alert-dismissible fade show" role="alert">
                 <?= $message ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-        <?php endif; ?>
+        <?php }?>
 
         <div class="row justify-content-center">
             <div class="col-md-6">

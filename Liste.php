@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-
-
 require_once __DIR__ . '/dao/CoursDao.php';
 
 // Créer l'objet coursDao
@@ -61,33 +59,33 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
         <h1>Liste des Cours Disponibles</h1>
     </header>
 
-    <?php if ($message): ?>
+    <?php if ($message){ ?>
         <div class="container mt-3">
             <div class="alert alert-success alert-dismissible fade show">
                 <?= $message ?>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         </div>
-    <?php endif; ?>
+    <?php } ?>
 
     <div class="container my-4">
-        <?php if (isset($erreur)): ?>
+        <?php if (isset($erreur)){ ?>
             <div class="alert alert-danger"><?= $erreur ?></div>
-        <?php else: ?>
+        <?php }else{ ?>
             <div class="row">
                 <?php 
-                // Pour chaque jour, récupérer ses cours
-                foreach ($jours as $jour):
+                
+                foreach ($jours as $jour) {
                     $coursDuJour = [];
-                    // Parcourir tous les cours pour trouver ceux du jour
+                    
                     foreach ($cours as $c) {
                         if ($c['Jour'] === $jour) {
                             $coursDuJour[] = $c;
                         }
                     }
                     
-                    // Si il y a des cours ce jour
-                    if (!empty($coursDuJour)):
+                    
+                    if (!empty($coursDuJour)) {
                 ?>
                     <div class="col-12">
                         <h3 class="mt-4"><?= $jour ?></h3>
@@ -103,36 +101,36 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($coursDuJour as $c): ?>
+                                    <?php foreach ($coursDuJour as $c) { ?>
                                         <tr class="<?= $c['places_restantes'] <= 0 ? 'table-secondary' : '' ?>">
                                             <td style="width: 15%"><?= date('H:i', strtotime($c['Heure'])) ?></td>
                                             <td style="width: 25%"><?= $c['Nature'] ?></td>
                                             <td style="width: 15%"><?= $c['Place'] ?></td>
                                             <td style="width: 25%">
-                                                <?php if ($c['places_restantes'] <= 0): ?>
+                                                <?php if ($c['places_restantes'] <= 0) { ?>
                                                     <span class="badge bg-danger">Complet</span>
-                                                <?php else: ?>
+                                                <?php } else { ?>
                                                     <span class="badge bg-success">
                                                         <?= $c['places_restantes'] ?> places disponibles
                                                     </span>
-                                                <?php endif; ?>
+                                                <?php } ?>
                                             </td>
                                             <td style="width: 20%"><?= $c['Professeur'] ?></td>
                                         </tr>
-                                    <?php endforeach; ?>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 <?php 
-                    endif;
-                endforeach;
+                    }
+                }
                 ?>
             </div>
-        <?php endif; ?>
+        <?php } ?>
     </div>
 
-    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin"): ?>
+    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
         <div class="container mt-5">
             <div class="card">
                 <div class="card-header">
@@ -173,7 +171,7 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
                 </div>
             </div>
         </div>
-    <?php endif; ?>
+    <?php } ?>
 
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p>&copy; 2025 GYMSYNC</p>

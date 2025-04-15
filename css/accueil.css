@@ -164,3 +164,8 @@ footer {
     padding: 1rem 0;
     width: 100%;
 }
+
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
