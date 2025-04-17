@@ -1,6 +1,25 @@
 <?php
 session_start();
 
+if (isset($_GET['download_doc']) && $_SESSION['role'] === "admin") {
+    $fichier = 'Doc_Technique_GYMSYNYC.pdf';
+    $chemin = __DIR__ . '/' . $fichier;
+
+    if (file_exists($chemin)) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . basename($fichier) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($chemin));
+        readfile($chemin);
+        exit;
+    } else {
+        die("Fichier introuvable.");
+    }
+}
+
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== "admin") {
     header('Location: index.php');
     exit;
@@ -536,7 +555,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="card p-4 shadow mb-4 w-100 text-center">
                     <h3 class="text-center">Assistance</h3>
                     <!-- Ajouter un lien vers le document technique -->
-
+                    <a href="Administrateur.php?download_doc=1" class="btn btn-primary mt-3">
+									Télécharger le document technique
+						</a>
                 </div>
             </div>
         </div>
