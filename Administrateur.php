@@ -157,6 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
                     // Enregistrer l'action dans l'historique
                     $historiqueDao->insererhistorique($messageHist);
+                    $historiques = $historiqueDao->recupererhistorique();
                     }
     
                 $message = "Les paiements sélectionnés ont été validés avec succès.";
