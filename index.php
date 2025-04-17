@@ -179,15 +179,15 @@ session_start();
             </div>
         </div>
         <div class="film-tape">
-    <img src="Images/FT.png" class="film-tape-bg">
-    <div class="photos">
-        <img src="Images/pilates1.jpg" alt="Photo 1" class="photo">
-        <img src="Images/pilates2.jpg" alt="Photo 2" class="photo">
-        <img src="Images/pilates3.jpg" alt="Photo 3" class="photo">
-        <img src="Images/pilates4.jpg" alt="Photo 4" class="photo">
-        <img src="Images/pilates5.jpg" alt="Photo 5" class="photo">
-    </div>
-</div>
+            <img src="Images/FT.png" class="film-tape-bg">
+            <div class="photos">
+                <img src="Images/pilates1.jpg" alt="Photo 1" class="photo">
+                <img src="Images/pilates2.jpg" alt="Photo 2" class="photo">
+                <img src="Images/pilates3.jpg" alt="Photo 3" class="photo">
+                <img src="Images/pilates4.jpg" alt="Photo 4" class="photo">
+                <img src="Images/pilates5.jpg" alt="Photo 5" class="photo">
+            </div>
+        </div>
 
     </div>
 </div>
