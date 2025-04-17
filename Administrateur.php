@@ -146,20 +146,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             if (!empty($_POST['membres'])) {
                 foreach ($_POST['membres'] as $membre_id) {
+                    // Mettre à jour la validation du paiement
                     $membreDao->basculerValidation($membre_id);
+                    
+                    // Récupérer les informations du membre
                     $membre = $membreDao->getMembre($membre_id);
-                }
+    
+                    // Créer le message pour l'historique
+                    $messageHist = "Paiement validé pour : " . $membre['Nom'] . " " . $membre['Prenom'];
+    
+                    // Enregistrer l'action dans l'historique
+                    $historiqueDao->insererhistorique($messageHist);
+                    }
+    
                 $message = "Les paiements sélectionnés ont été validés avec succès.";
                 $messageType = 'success';
-            } else {
+                } else {
                 $message = "Veuillez sélectionner au moins un membre.";
                 $messageType = 'warning';
-            }
-        } catch (Exception $e) {
+                }
+            } catch (Exception $e) {
             $message = "Erreur lors de la validation : " . $e->getMessage();
             $messageType = 'danger';
+            }
         }
-    }
 
     if (isset($_POST['export_csv'])) {
         try {

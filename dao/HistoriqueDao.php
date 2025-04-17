@@ -42,6 +42,19 @@ class HistoriqueDao extends BaseDonneeDao {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         
+
+        public function recupMembrePayer($idmembre) {
+            $sql = "SELECT m.Nom, m.Prenom
+                    FROM membre m
+                    WHERE m.Identifiant = :idmembre";
+        
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindParam(':idmembre', $idmembre, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
         
         public function recupHistoCours($idcours) {
         $sql = "SELECT Nature, Jour, Heure
@@ -54,6 +67,9 @@ class HistoriqueDao extends BaseDonneeDao {
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
+
+
+
 }
 
 
