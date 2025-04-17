@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 session_start();
 
@@ -89,11 +88,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <?php include 'NavBar.php'; ?>
 
-    <header class="header-inscription text-center">
+    <header class="header bg-dark text-center">
         <h1>Formulaire d'inscription</h1>
     </header>
 
-    <div class="container my-4">
+    <div class="container my-4" id="formulaire">
         <?php if ($message){?>
             <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
                 <?php echo $message; ?>
@@ -102,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php } ?>
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="carte-cours">
                     <h3 class="titre-selection text-center">Sélection des cours</h3>
                     <form method="POST" action="inscription.php">

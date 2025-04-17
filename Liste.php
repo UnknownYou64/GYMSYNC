@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?php
 session_start();
 
@@ -56,7 +56,7 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
     include 'NavBar.php';
 ?>
 
-    <header class="bg-dark text-white text-center py-3">
+    <header class="bg-dark text-center">
         <h1>Liste des Cours Disponibles</h1>
     </header>
 

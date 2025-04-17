@@ -1,7 +1,8 @@
 body {
-    background: linear-gradient(135deg, #1a2a6c 0%, #2a4858 100%);
+    background: url('../Images/arriereplaninscription.jpeg') no-repeat center center fixed;
+    background-size: cover;
     font-family: 'Poppins', sans-serif;
-    color: white;
+    color: rgb(193, 210, 2);
     min-height: 100vh;
 }
 
@@ -13,13 +14,23 @@ body {
     margin-top: 20px;
 }
 
+#formulaire {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+
+
 header {
-    background: rgba(0, 0, 0, 0.3);
+    
     padding: 2rem 0;
-    backdrop-filter: blur(5px);
+    
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 header h1 {
@@ -112,17 +123,7 @@ footer {
     width: 100%;
 }
 
-.header-inscription {
-    background-color: rgba(var(--bs-dark-rgb));
-    padding: 16px;
-    margin-bottom: 2rem;
-}
 
-.header-inscription h1 {
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 2.5rem;
-}
 
 .carte-cours {
     background-color: rgba(59, 62, 71, 0.2);

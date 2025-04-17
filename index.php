@@ -21,39 +21,12 @@ session_start();
     include 'NavBar.php';
 ?>
 
-<header class="bg-dark text-white text-center py-3">
-    <h1>Accueil</h1>
+<header class="text-center bg-dark py-3">
+    <h1>Bienvenu sur le site de l'assoctiation de gymnastique de bizanos</h1>
 </header>
 
-<div class="container my-4">
-    <div class="row ">
-                <!--
-
-    ici le code pour les informations necessaire a la presentation du site pour la page d'acceuil 
-    voici le site ou prendre les information : http://gymavenirbizanos.free.fr/index.html             
-    on doit retrouver les informations suivantes :
-    - les horaires d'ouverture
-    - les cours proposés
-    - les tarifs
-    - le lieu
-    - les contacts
-    - les actualités
-    - les photos ( optionnel ) a voir avec la professeur
-                
-                
-                
-        Soit vous garder le code ci dessous soit vous le supprimer et vous le refaite a votre maniere
-
-        
-
-    
-        <div class="col-md-4 bg-light p-3">c1</div>
-        <div class="col-md-4 bg-secondary text-white p-3">c2</div>
-        <div class="col-md-4 bg-dark text-white p-3">c3</div>
-    -->
-
-    
-    </div>
+<div class="container my-4" id="accueil">
+    <div>
         
         <h2 class="col-md-12 bg-secondary text-white p-3 mb-4">Actualités</h2>
         <?php
@@ -86,7 +59,7 @@ session_start();
         ?>
         <br>
         
-        <h2 class="col-md-4 bg-secondary text-white p-3 mb-4">Nos tarifs:</h2> 
+        <h2 class="col-md-12 bg-secondary text-white p-3 mb-4">Nos tarifs:</h2> 
 
         <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -131,7 +104,7 @@ session_start();
         </div>
         
         <br>
-        <h2 class="col-md-4 bg-secondary text-white p-3 mb-4">Nous situer</h2>
+        <h2 class="col-md-12 bg-secondary text-white p-3 mb-4">Nous situer</h2>
 
         <div class="row">
             <div class="col-md-6 mb-4">
@@ -167,27 +140,27 @@ session_start();
 
         <div class="card shadow-sm mb-4">
             <div class="card-body p-0">
-                <div class="ratio ratio-16x9">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2904.185641370534!2d-0.35410538471574815!3d43.28943387913549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd56491e11e42a2b%3A0xc1c69fea539e3f82!2sEspace+Daniel+Balavoine!5e0!3m2!1sfr!2sfr!4v1501675843131" 
-                        style="border:0;" 
-                        allowfullscreen="" 
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                </div>
+            <div class="ratio ratio-4x3">
+                <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2904.185641370534!2d-0.35410538471574815!3d43.28943387913549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd56491e11e42a2b%3A0xc1c69fea539e3f82!2sEspace+Daniel+Balavoine!5e0!3m2!1sfr!2sfr!4v1501675843131" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
             </div>
         </div>
         <div class="film-tape">
-    <img src="Images/FT.png" class="film-tape-bg">
-    <div class="photos">
-        <img src="Images/pilates1.jpg" alt="Photo 1" class="photo">
-        <img src="Images/pilates2.jpg" alt="Photo 2" class="photo">
-        <img src="Images/pilates3.jpg" alt="Photo 3" class="photo">
-        <img src="Images/pilates4.jpg" alt="Photo 4" class="photo">
-        <img src="Images/pilates5.jpg" alt="Photo 5" class="photo">
-    </div>
-</div>
+            <img src="Images/FT.png" class="film-tape-bg">
+            <div class="photos">
+                <img src="Images/pilates1.jpg" alt="Photo 1" class="photo">
+                <img src="Images/pilates2.jpg" alt="Photo 2" class="photo">
+                <img src="Images/pilates3.jpg" alt="Photo 3" class="photo">
+                <img src="Images/pilates4.jpg" alt="Photo 4" class="photo">
+                <img src="Images/pilates5.jpg" alt="Photo 5" class="photo">
+            </div>
+        </div>
 
     </div>
 </div>
