@@ -21,8 +21,8 @@ session_start();
     include 'NavBar.php';
 ?>
 
-<header class="text-center bg-dark py-3">
-    <h1>Bienvenu sur le site de l'assoctiation de gymnastique de bizanos</h1>
+<header class="text-center bg-dark">
+    <h1>Bienvenue sur le site de l'association de gymnastique de Bizanos.</h1>
 </header>
 
 <div class="container my-4" id="accueil">

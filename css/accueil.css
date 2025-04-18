@@ -1,6 +1,7 @@
 body {
     background: url('../Images/arriereplanacceuil.jpeg') no-repeat center center fixed;
     background-size: cover;
+    backdrop-filter: blur(5px);
     font-family: 'Poppins', sans-serif;
     color: rgb(193, 210, 2);
     min-height: 100vh;
@@ -26,11 +27,22 @@ body {
 
 
 
-header h1 {
+header {
+    
+    padding: 1rem 0;
+    
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+
+h1 {
+    color: rgb(193, 210, 2);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .table {

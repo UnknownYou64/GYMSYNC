@@ -277,11 +277,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     include 'NavBar.php';
 ?>
 
-<header class="bg-dark text-white text-center py-3">
+<header class="bg-dark text-center ">
     <h1>Espace de Gestion</h1>
 </header>
 
-<div class="container my-4">
+<div class="container my-4" id="admin">
+
+
     <?php if ($message){ ?>
         <div class="alert alert-<?php echo $messageType; ?> alert-dismissible fade show" role="alert">
             <?php echo $message; ?>
@@ -289,9 +291,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     <?php } ?>
 
+
+
     <div class="row g-3 justify-content-center">
-        <!-- Première ligne -->
-       
         <div class="row g-3">
         <div class="col-12 col-md-6">
             
@@ -317,9 +319,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
 
-        <!-- Deuxième ligne -->
+        
+        
         <div class="col-12 col-md-6">
-            <!-- Gestion des cours -->
+            
+        
             <div class="card p-3 shadow-sm">
                 <h3 class="text-center">Gestion des Cours</h3>
                 <form method="POST" action="Administrateur.php">
@@ -355,11 +359,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
             </div>
             </div>
+
+
+
             
         <div class="col-12 col-md-6">
             <div class="card p-3 shadow-sm mb-4">
             <h3 class="text-center">Modifier Actualités</h3>
-            <!-- ajout actu -->
             <form method="POST" action="Administrateur.php" class="mb-4">
                 <div class="row">
                     <div class="col-md-12">
@@ -386,10 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
                 <button type="submit" name="ajouter_actualite" class="btn btn-success w-100">Ajouter l'actualité</button>
             </form>
-
             <hr>
-
-            <!-- Toutes les actualitées -->
             <form method="POST" action="Administrateur.php">
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered">
@@ -445,7 +448,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
 
         <div class="col-12 col-md-6">
-            <!-- Liste des Membres à Valider -->
             <div class="card p-3 shadow-sm mb-4">
                 <h3 class="text-center">Liste des Membres à Valider</h3>
                 <form method="POST" action="Administrateur.php">
@@ -484,14 +486,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </form>
             </div>
-        </div>
+        
 
 
 
 
 
-        <!-- Nouvelle div pour les boutons d'export -->
-        <div class="col-12 col-md-6">
+        
             <div class="card p-3 shadow-sm mb-4">
                 <h3 class="text-center">Exporter les Données</h3>
                 <form method="POST" action="Administrateur.php">
@@ -519,11 +520,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                 </form>
             </div>
-            </div>
-
-
-
-        
     </div>
 
 
@@ -533,46 +529,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
 
     <div class="row justify-content-center mt-4">
-    <div class="col-12">
-        <div class="card p-4 shadow mb-4">
-            <h3 class="text-center">Historique</h3>
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered fs-5">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Action</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach (array_slice($historiques, 0, 10) as $historique){ ?>
+        <div class="col-12">
+            <div class="card p-4 shadow mb-4">
+                <h3 class="text-center">Historique</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered fs-5">
+                        <thead class="table-dark">
                             <tr>
-                                <td><?= htmlspecialchars($historique['Action']) ?></td>
-                                <td><?= htmlspecialchars($historique['DateAction']) ?></td>
+                                <th>Action</th>
+                                <th>Date</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
+                        </thead>
+                        <tbody>
+                            <?php foreach (array_slice($historiques, 0, 10) as $historique){ ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($historique['Action']) ?></td>
+                                    <td><?= htmlspecialchars($historique['DateAction']) ?></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
                 </table>
+                </div>
             </div>
         </div>
-    </div>
+    </div>                            
+
+
+    
 </div>
 
 
 
-    <div class="container-fluid">
+    
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card p-4 shadow mb-4 w-100 text-center">
                     <h3 class="text-center">Assistance</h3>
-                    <!-- Ajouter un lien vers le document technique -->
+                    
                     <a href="Administrateur.php?download_doc=1" class="btn btn-primary mt-3">
 									Télécharger le document technique
 						</a>
                 </div>
             </div>
         </div>
-    </div>
+    
 </div>
 
 

@@ -56,10 +56,13 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
     include 'NavBar.php';
 ?>
 
-    <header class="bg-dark text-center">
+    <header class="bg-dark text-center ">
         <h1>Liste des Cours Disponibles</h1>
     </header>
 
+    
+
+    <div class="container my-4" id="liste">
     <?php if ($message){ ?>
         <div class="container mt-3">
             <div class="alert alert-success alert-dismissible fade show">
@@ -68,8 +71,6 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
             </div>
         </div>
     <?php } ?>
-
-    <div class="container my-4">
         <?php if (isset($erreur)){ ?>
             <div class="alert alert-danger"><?= $erreur ?></div>
         <?php }else{ ?>
@@ -132,7 +133,7 @@ $jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche
     </div>
 
     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === "admin") { ?>
-        <div class="container mt-5">
+        <div class="container mt-5" id="ajoutliste">
             <div class="card">
                 <div class="card-header">
                     <h3>Ajouter un nouveau cours</h3>
