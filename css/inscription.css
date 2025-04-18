@@ -16,7 +16,7 @@ body {
 }
 
 #formulaire {
-    background: rgba(26, 30, 64, 0.67);
+    background: rgba(31, 31, 33, 0.685);
     backdrop-filter: blur(10px);
     border-radius: 15px;
     padding: 20px;
@@ -128,14 +128,14 @@ footer {
 
 .carte-cours {
     background-color: rgba(59, 62, 71, 0.2);
-    border: 2px solid #7231ff;
+    border: 3px solid #ffd700 !important;
     border-radius: 15px;
     padding: 2rem;
     box-shadow: 0 5px 15px rgba(114, 49, 255, 0.2);
 }
 
 .titre-selection {
-    color: #7231ff;
+    color: #ffd700;
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
 }
@@ -198,8 +198,8 @@ footer {
 }
 
 .btn-inscription {
-    background-color: #7231ff;
-    color: #ffc01d;
+    background-color: #ffd700;
+    color: black;
     padding: 1rem;
     font-size: 1.1rem;
     font-weight: 500;
@@ -209,8 +209,8 @@ footer {
 }
 
 .btn-inscription:hover {
-    background-color: #ffc01d;
-    color: #7231ff;
+    background-color: #ffd700;
+    color: black;
     transform: translateY(-2px);
 }
 
@@ -240,7 +240,7 @@ footer {
 
 .form-control {
     background-color: rgba(31, 35, 48, 0.95);
-    border: 1px solid #7231ff;
+    border: 1px solid #ffd700;
     color: #ffc01d;
 }
 
