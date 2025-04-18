@@ -152,21 +152,15 @@ session_start();
             </div>
         </div>
         <div class="film-tape">
-            <img src="Images/FT.png" class="film-tape-bg">
-            <div class="photos">
-                <img src="Images/pilates1.jpg" alt="Photo 1" class="photo">
-                <img src="Images/pilates2.jpg" alt="Photo 2" class="photo">
-                <img src="Images/pilates3.jpg" alt="Photo 3" class="photo">
-                <img src="Images/pilates4.jpg" alt="Photo 4" class="photo">
-                <img src="Images/pilates5.jpg" alt="Photo 5" class="photo">
-            </div>
+            <img src="Images/BandeauAccueil.png" class="film-tape-bg">
+            
         </div>
 
     </div>
 </div>
-
+                </div>
 <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2025 GYMSYNC</p>
+    <p>&copy; 2025 GYMSYNC - Tous droits réservés</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

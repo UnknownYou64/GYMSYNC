@@ -528,7 +528,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     
 
-    <div class="row justify-content-center mt-4">
+    
         <div class="col-12">
             <div class="card p-4 shadow mb-4">
                 <h3 class="text-center">Historique</h3>
@@ -552,18 +552,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             </div>
         </div>
-    </div>                            
+                              
 
 
     
-</div>
+
 
 
 
     
-        <div class="row justify-content-center">
+        
             <div class="col-12">
-                <div class="card p-4 shadow mb-4 w-100 text-center">
+                <div class="card p-4 shadow mb-4 ">
                     <h3 class="text-center">Assistance</h3>
                     
                     <a href="Administrateur.php?download_doc=1" class="btn btn-primary mt-3">
@@ -571,10 +571,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 						</a>
                 </div>
             </div>
-        </div>
+        
     
 </div>
-
+</div>
 
 
 
@@ -620,7 +620,7 @@ document.getElementById('selectAll').addEventListener('change', function() {
     }
 });
 </script>
-
+</div>
 <footer class="bg-dark text-white text-center py-3">
     <p>&copy; 2025 GYMSYNC - Tous droits réservés</p>
 </footer>
