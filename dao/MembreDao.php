@@ -8,8 +8,8 @@ class MembreDao extends BaseDonneeDao {
         parent::__construct('membre');
     }
 
-    public $admin_email = "admin@gmail.com";
-    public $admin_password = "admin";
+    public $admin_email = "gymsync64@gmail.com";
+    public $admin_password = "Gymsync64!@";
 
     public function verifierConnexion($email, $password) {
         if ($email == $this->admin_email && $password == $this->admin_password) {
