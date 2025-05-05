@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mt-4 text-center text-muted">
                                 <p class="mb-2" style="color: #ffd700">Pour vous créer un compte :</p>
                                 <p style="color: #ffd700">Veuillez contacter l'administrateur par email à :<br>
-                            <strong style="color: black">gymsync64@gmail.com</strong></p>
+                            <strong style="color: black">gymavenirbizanos@free.fr</strong></p>
                         </div>
                         </form>
                     </div>
